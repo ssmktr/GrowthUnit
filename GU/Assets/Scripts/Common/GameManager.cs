@@ -8,4 +8,10 @@ public class GameManager : Singleton<GameManager> {
     {
         SceneManager.LoadScene(_SceneName);
     }
+
+    public static void ViewDebug(object value)
+    {
+        if (GameInfo.DevelopMode)
+            Debug.Log(value);
+    }
 }

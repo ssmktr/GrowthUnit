@@ -50,7 +50,7 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
                     else
                     {
                         UnitLoadReady = true;
-                        Debug.LogWarning("Not Found : " + _UnitName);
+                        GameManager.ViewDebug("Not Found : " + _UnitName);
                     }
                 }
             }
@@ -58,7 +58,7 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
         else
         {
             UnitLoadReady = true;
-            Debug.LogError(www.error);
+            GameManager.ViewDebug(www.text);
         }
     }
 }

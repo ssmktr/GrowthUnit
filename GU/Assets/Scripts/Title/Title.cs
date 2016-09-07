@@ -27,11 +27,11 @@ public class Title : MonoBehaviour {
 
         if (www.error == null)
         {
-            Debug.Log("VersionCheck : " + www.text);
+            GameManager.ViewDebug("VersionCheck : " + www.text);
             Login(www.text);
         }
         else
-            Debug.LogError(www.error);
+            GameManager.ViewDebug(www.error);
     }
 
     void Login(string _Content)
@@ -48,7 +48,8 @@ public class Title : MonoBehaviour {
                     if (DicData.ContainsKey("tableversion"))
                     {
                         // 게임에 필요한 데이터 받기
-                        StartCoroutine(_LoadTableDatas());
+                        StartCoroutine(_LoadTableData());
+                        StartCoroutine(_LoadConfigData());
                     }
                 }
                 else
@@ -60,10 +61,11 @@ public class Title : MonoBehaviour {
         }
     }
 
+    #region JSONDATA
     #region UNITDATA
-    IEnumerator _LoadTableDatas()
+    IEnumerator _LoadTableData()
     {
-        WWW www = new WWW("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TableDatas/UnitDatas.json");
+        WWW www = new WWW("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TableDatas/UnitData.json");
         yield return www;
 
         while (!www.isDone)
@@ -71,17 +73,17 @@ public class Title : MonoBehaviour {
 
         if (www.error == null)
         {
-            Debug.Log("TableDatas : " + www.text);
+            GameManager.ViewDebug("UnitData : " + www.text);
             SetUnitDataBase(www.text);
         }
         else
-            Debug.LogError(www.error);
+            GameManager.ViewDebug(www.error);
     }
 
     void SetUnitDataBase(string _Content)
     {
         string Content = _Content.Trim();
-        DataManager.Instance.ListUnitDataBase.Clear();
+        DataManager.ListUnitDataBase.Clear();
         List<object> ListData = Json.Deserialize(Content) as List<object>;
         for (int i = 0; i < ListData.Count; ++i)
         {
@@ -114,9 +116,46 @@ public class Title : MonoBehaviour {
                 if (DicData.ContainsKey("cri"))
                     data.cri = JsonUtil.GetFloatValue(DicData, "cri");
 
-                DataManager.Instance.ListUnitDataBase.Add(data);
+                DataManager.ListUnitDataBase.Add(data);
             }
         }
     }
+    #endregion
+    #region CONFIGDATA
+    IEnumerator _LoadConfigData()
+    {
+        WWW www = new WWW("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TableDatas/ConfigData.json");
+        yield return www;
+
+        while (!www.isDone)
+            yield return null;
+
+        if (www.error == null)
+        {
+            GameManager.ViewDebug("ConfigData : " + www.text);
+            SetConfigData(www.text);
+        }
+        else
+            GameManager.ViewDebug(www.error);
+    }
+
+    void SetConfigData(string _Content)
+    {
+        string Content = _Content.Trim();
+        DataManager.DicConfig.Clear();
+        Dictionary<string, object> DicData = Json.Deserialize(Content) as Dictionary<string, object>;
+        if (DicData != null)
+        {
+            if (DicData.ContainsKey("CreateGold"))
+                DataManager.DicConfig.Add("CreateGold", JsonUtil.GetIntValue(DicData, "CreateGold"));
+
+            if (DicData.ContainsKey("CreateRuby"))
+                DataManager.DicConfig.Add("CreateRuby", JsonUtil.GetIntValue(DicData, "CreateRuby"));
+
+            if (DicData.ContainsKey("CreateHeart"))
+                DataManager.DicConfig.Add("CreateHeart", JsonUtil.GetIntValue(DicData, "CreateHeart"));
+        }
+    }
+    #endregion
     #endregion
 }
