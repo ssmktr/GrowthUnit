@@ -13,5 +13,6 @@ public class UnitDataBase {
         public int atk = 0;
         public int def = 0;
         public float cri = 0f;
+        public float cardsize = 0f;
     };
 }

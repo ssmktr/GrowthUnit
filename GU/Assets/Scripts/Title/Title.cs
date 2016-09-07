@@ -131,6 +131,9 @@ public class Title : MonoBehaviour {
                 if (DicData.ContainsKey("cri"))
                     data.cri = JsonUtil.GetFloatValue(DicData, "cri");
 
+                if (DicData.ContainsKey("cardsize"))
+                    data.cardsize = JsonUtil.GetFloatValue(DicData, "cardsize");
+
                 DataManager.ListUnitDataBase.Add(data);
             }
         }
