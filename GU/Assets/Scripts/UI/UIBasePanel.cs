@@ -38,4 +38,9 @@ public class UIBasePanel : MonoBehaviour {
     {
         Destroy(gameObject);
     }
+
+    public virtual void Prev()
+    {
+
+    }
 }

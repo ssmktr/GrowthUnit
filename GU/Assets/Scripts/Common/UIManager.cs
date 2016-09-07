@@ -48,6 +48,7 @@ public class UIManager : Singleton<UIManager> {
             CurPanel = Panel.GetComponent<UIBasePanel>();
             CurPanel.parameters = _parameters;
             CurPanel.LateInit();
+            OpenEvent();
         }
 
         return Panel;
@@ -72,5 +73,61 @@ public class UIManager : Singleton<UIManager> {
         }
 
         return null;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Prev();
+    }
+
+    public void Prev()
+    {
+        int CurIdx = -1;
+        int PrevIdx = -1;
+        for (int i = 0; i < ListPanel.Count; ++i)
+        {
+            if (CurIdx == -1 && CurPanel.name == ListPanel[i].name)
+            {
+                CurIdx = i;
+            }
+            else
+            {
+                if (ListPanel[i].eUIType != UIBasePanel.UIType.Ignore)
+                {
+                    PrevIdx = i;
+                }
+            }
+        }
+
+        if (CurIdx >= 0)
+        {
+            if (ListPanel[CurIdx] is LobbyPanel)
+            {
+                Debug.Log("로비 패널에서는 게임 종료 해야됨");
+            }
+            else if (PrevIdx >= 0)
+            {
+                ListPanel[CurIdx].Hide();
+                ListPanel[PrevIdx].LateInit();
+                CurPanel = ListPanel[PrevIdx];
+                CurPanel.Prev();
+            }
+        }
+    }
+
+    static void OpenEvent()
+    {
+        for (int i = 0; i < ListPanel.Count; ++i)
+        {
+            if (CurPanel.name == ListPanel[i].name)
+            {
+                UIBasePanel panel = ListPanel[i];
+                ListPanel.RemoveAt(i);
+                ListPanel.Insert(0, panel);
+                CurPanel = panel;
+                break;
+            }
+        }
     }
 }
