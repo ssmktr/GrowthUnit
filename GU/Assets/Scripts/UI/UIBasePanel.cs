@@ -7,7 +7,6 @@ public class UIBasePanel : MonoBehaviour {
     {
         Default,
         Message,
-        Toast,
         Popup,
         Ignore,
     };
@@ -36,7 +35,8 @@ public class UIBasePanel : MonoBehaviour {
 
     public virtual void Close()
     {
-        UIManager.CloseEvent();
+        if (eUIType != UIType.Ignore)
+            UIManager.CloseEvent();
         Destroy(gameObject);
     }
 

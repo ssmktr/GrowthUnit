@@ -35,11 +35,11 @@ public class UIManager : Singleton<UIManager> {
             Panel.transform.localScale = Vector3.one;
             Panel.GetComponent<UIBasePanel>().Init();
 
-            if (Panel.GetComponent<UIBasePanel>().eUIType != UIBasePanel.UIType.Toast)
+            if (Panel.GetComponent<UIBasePanel>().eUIType != UIBasePanel.UIType.Ignore)
                 ListPanel.Add(Panel.GetComponent<UIBasePanel>());
         }
 
-        if (Panel.GetComponent<UIBasePanel>().eUIType == UIBasePanel.UIType.Ignore || Panel.GetComponent<UIBasePanel>().eUIType == UIBasePanel.UIType.Toast)
+        if (Panel.GetComponent<UIBasePanel>().eUIType == UIBasePanel.UIType.Ignore)
         {
             Panel.GetComponent<UIBasePanel>().parameters = _parameters;
             Panel.GetComponent<UIBasePanel>().LateInit();
@@ -94,7 +94,7 @@ public class UIManager : Singleton<UIManager> {
             }
             else
             {
-                if (ListPanel[i].eUIType != UIBasePanel.UIType.Ignore || ListPanel[i].eUIType != UIBasePanel.UIType.Toast)
+                if (ListPanel[i].eUIType != UIBasePanel.UIType.Ignore)
                 {
                     PrevIdx = i;
                 }
@@ -105,13 +105,10 @@ public class UIManager : Singleton<UIManager> {
         {
             if (ListPanel[CurIdx] is LobbyPanel)
             {
-                //OpenMessagePopup("로비 패널에서는 게임 종료 해야됨", delegate() {
-                //    Debug.Log("OK");
-                //},
-                //delegate() {
-                //    Debug.Log("CANCEL");
-                //});
-                OpenToastMessagePopup("로비 패널에서는 게임 종료 해야됨");
+                OpenMessagePopup("게임을 종료 하시겠습니까?", delegate ()
+                {
+                    Debug.Log("OK");
+                }, delegate () { }, "예", "아니오", "게임 종료");
             }
             else if (PrevIdx >= 0)
             {
