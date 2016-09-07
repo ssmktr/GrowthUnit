@@ -21,7 +21,10 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
         WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/UnitDatas/UnitDatas.unity3d", GameInfo.UnitVersion);
         yield return www;
 
-        if (www.isDone && www.error == null)
+        while (!www.isDone)
+            yield return null;
+
+        if (www.error == null)
         {
             AssetBundle bundle = www.assetBundle;
             if (bundle != null)

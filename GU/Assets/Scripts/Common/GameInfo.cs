@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class GameInfo {
-    public const string ClientVersion = "0.001";
-    public const string ServerVersion = "0.001";
+    public const double ClientVersion = 0.001;
+    public const double ServerVersion = 0.001;
 
     public const int UnitVersion = 0;
     public const int TableVersion = 0;
