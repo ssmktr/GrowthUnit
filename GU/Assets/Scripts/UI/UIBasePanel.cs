@@ -36,6 +36,7 @@ public class UIBasePanel : MonoBehaviour {
 
     public virtual void Close()
     {
+        UIManager.CloseEvent();
         Destroy(gameObject);
     }
 

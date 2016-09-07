@@ -136,6 +136,20 @@ public class UIManager : Singleton<UIManager> {
         }
     }
 
+    public static void CloseEvent()
+    {
+        for (int i = 0; i < ListPanel.Count; ++i)
+        {
+            if (CurPanel.name == ListPanel[i].name)
+            {
+                CurPanel = ListPanel[i + 1];
+                UIBasePanel panel = ListPanel[i];
+                ListPanel.RemoveAt(i);
+                break;
+            }
+        }
+    }
+
     public void OpenPopup(string msg, System.Action _call1 = null, System.Action _call2 = null, string _btnName1 = "확인", string _btnName2 = "취소", string _title = "알림")
     {
         OpenUI("Popup/MessagePopup").GetComponent<MessagePopup>().SetData(msg, _call1, _call2, _btnName1, _btnName2, _title);
