@@ -3,12 +3,10 @@ using System.Collections;
 
 public class AssetBundleLoad : Singleton<AssetBundleLoad> {
 
-    public static int UnitVersion = 0;
-    public static int TableVersion = 0;
-
     static bool UnitLoadReady = true;
     static bool TableLoadReady = true;
 
+    // 유닛 에셋번들 로드
     public void AssetUnitLoad(string _UnitName, System.Action<GameObject> _call = null, GameObject _parent = null, float _size = 100)
     {
         StartCoroutine(_AssetUnitLoad(_UnitName, _call, _parent, _size));
@@ -20,7 +18,7 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
             yield return null;
 
         UnitLoadReady = false;
-        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/UnitDatas/UnitDatas.unity3d", UnitVersion);
+        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/UnitDatas/UnitDatas.unity3d", GameInfo.UnitVersion);
         yield return www;
 
         if (www.isDone && www.error == null)
