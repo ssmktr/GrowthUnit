@@ -4,8 +4,10 @@ using System.Collections;
 public class AssetBundleLoad : Singleton<AssetBundleLoad> {
 
     static bool UnitLoadReady = true;
+    static bool TextureLoadReady = true;
     static bool TableLoadReady = true;
 
+    #region UNITLOAD
     // 유닛 에셋번들 로드
     public void AssetUnitLoad(string _UnitName, System.Action<GameObject> _call = null, GameObject _parent = null, float _size = 100)
     {
@@ -61,4 +63,58 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
             GameManager.ViewDebug(www.text);
         }
     }
+    #endregion
+    #region TEXTURELOAD
+    // 유닛 에셋번들 로드
+    public void AssetTextureLoad(string _TextureName, System.Action<Texture> _call = null)
+    {
+        StartCoroutine(_AssetTextureLoad(_TextureName, _call));
+    }
+
+    IEnumerator _AssetTextureLoad(string _TextureName, System.Action<Texture> _call = null)
+    {
+        while (!TextureLoadReady)
+            yield return null;
+
+        TextureLoadReady = false;
+        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TextureDatas/TextureDatas.unity3d", GameInfo.TextureVersion);
+        yield return www;
+
+        while (!www.isDone)
+            yield return null;
+
+        if (www.error == null)
+        {
+            AssetBundle bundle = www.assetBundle;
+            if (bundle != null)
+            {
+                AssetBundleRequest req = bundle.LoadAssetAsync(_TextureName, typeof(Texture));
+                yield return req;
+
+                if (req != null)
+                {
+                    Texture UnitAsset = req.asset as Texture;
+                    if (UnitAsset != null)
+                    {
+                        bundle.Unload(false);
+                        TextureLoadReady = true;
+
+                        if (_call != null)
+                            _call(UnitAsset);
+                    }
+                    else
+                    {
+                        TextureLoadReady = true;
+                        GameManager.ViewDebug("Not Found : " + _TextureName);
+                    }
+                }
+            }
+        }
+        else
+        {
+            TextureLoadReady = true;
+            GameManager.ViewDebug(www.text);
+        }
+    }
+    #endregion
 }

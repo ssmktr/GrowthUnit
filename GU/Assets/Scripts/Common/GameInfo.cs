@@ -11,4 +11,5 @@ public class GameInfo {
     public const int TableVersion = 0;
     public const int TextureVersion = 0;
     public const int SoundVersion = 0;
+    public const int EffectVersion = 0;
 }

@@ -5,12 +5,22 @@ using MiniJSON;
 
 public class Title : MonoBehaviour {
 
+    public static bool GameReady = false;
+
     public UICamera UiCamera;
 
 	void Start () {
+        GameReady = false;
         ClientVersionCheck();
 	}
 
+    void Update()
+    {
+        if (GameReady)
+        {
+            GameManager.GoScene("Main");
+        }
+    }
 
     void ClientVersionCheck()
     {
@@ -48,8 +58,7 @@ public class Title : MonoBehaviour {
                     if (DicData.ContainsKey("tableversion"))
                     {
                         // 게임에 필요한 데이터 받기
-                        StartCoroutine(_LoadTableData());
-                        StartCoroutine(_LoadConfigData());
+                        StartCoroutine(_Login());
                     }
                 }
                 else
@@ -59,6 +68,12 @@ public class Title : MonoBehaviour {
                 }
             }
         }
+    }
+
+    IEnumerator _Login()
+    {
+        yield return StartCoroutine(_LoadTableData());
+        yield return StartCoroutine(_LoadConfigData());
     }
 
     #region JSONDATA
@@ -155,6 +170,8 @@ public class Title : MonoBehaviour {
             if (DicData.ContainsKey("CreateHeart"))
                 DataManager.DicConfig.Add("CreateHeart", JsonUtil.GetIntValue(DicData, "CreateHeart"));
         }
+
+        GameReady = true;
     }
     #endregion
     #endregion
