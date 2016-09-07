@@ -104,7 +104,12 @@ public class UIManager : Singleton<UIManager> {
         {
             if (ListPanel[CurIdx] is LobbyPanel)
             {
-                Debug.Log("로비 패널에서는 게임 종료 해야됨");
+                OpenPopup("로비 패널에서는 게임 종료 해야됨", delegate() {
+                    Debug.Log("OK");
+                },
+                delegate() {
+                    Debug.Log("CANCEL");
+                });
             }
             else if (PrevIdx >= 0)
             {
@@ -129,5 +134,10 @@ public class UIManager : Singleton<UIManager> {
                 break;
             }
         }
+    }
+
+    public void OpenPopup(string msg, System.Action _call1 = null, System.Action _call2 = null, string _btnName1 = "확인", string _btnName2 = "취소", string _title = "알림")
+    {
+        OpenUI("Popup/MessagePopup").GetComponent<MessagePopup>().SetData(msg, _call1, _call2, _btnName1, _btnName2, _title);
     }
 }
