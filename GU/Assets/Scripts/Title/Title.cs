@@ -102,7 +102,7 @@ public class Title : MonoBehaviour {
     IEnumerator _LoadTextureData()
     {
         AssetBundleLoad.TextureLoadReady = false;
-        WWW www = WWW.LoadFromCacheOrDownload(GameInfo.NetworkUrl + GameInfo.AssetBundlePath + "TextureData/TextureData.unity3d", GameInfo.TextureVersion);
+        WWW www = WWW.LoadFromCacheOrDownload(GameInfo.AssetBundleUrl + "TextureData/TextureData.unity3d", GameInfo.TextureVersion);
         while (!www.isDone)
         {
             UiProgressBar.gameObject.SetActive(true);
@@ -127,7 +127,7 @@ public class Title : MonoBehaviour {
     IEnumerator _LoadUnitData()
     {
         AssetBundleLoad.UnitLoadReady = false;
-        WWW www = WWW.LoadFromCacheOrDownload(GameInfo.NetworkUrl + GameInfo.AssetBundlePath + "UnitData/UnitData.unity3d", GameInfo.UnitVersion);
+        WWW www = WWW.LoadFromCacheOrDownload(GameInfo.AssetBundleUrl + "UnitData/UnitData.unity3d", GameInfo.UnitVersion);
         while (!www.isDone)
         {
             UiProgressBar.gameObject.SetActive(true);
@@ -151,7 +151,7 @@ public class Title : MonoBehaviour {
     #region UNITDATA
     IEnumerator _LoadTableData()
     {
-        WWW www = new WWW(GameInfo.NetworkUrl + GameInfo.AssetBundlePath + "TableData/UnitData.json");
+        WWW www = new WWW(GameInfo.AssetBundleUrl + "TableData/UnitData.json");
         while (!www.isDone)
         {
             UiProgressBar.gameObject.SetActive(true);
@@ -219,7 +219,7 @@ public class Title : MonoBehaviour {
     #region CONFIGDATA
     IEnumerator _LoadConfigData()
     {
-        WWW www = new WWW(GameInfo.NetworkUrl + GameInfo.AssetBundlePath + "TableData/ConfigData.json");
+        WWW www = new WWW(GameInfo.AssetBundleUrl + "TableData/ConfigData.json");
         while (!www.isDone)
         {
             UiProgressBar.gameObject.SetActive(true);

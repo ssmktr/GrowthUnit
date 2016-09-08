@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameInfo {
     public const string NetworkUrl = "http://ssmktr.ivyro.net/GrowthUnit/";
-    public const string AssetBundlePath = "AssetBundle/";
+    public const string AssetBundleUrl = "http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/";
 
     public const double ClientVersion = 0.001;
     public const double ServerVersion = 0.001;
