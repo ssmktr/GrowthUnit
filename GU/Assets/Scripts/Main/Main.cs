@@ -15,7 +15,6 @@ public class Main : MonoBehaviour {
         }
 
         UIManager.Instance.SetManager(UIRoot, SystemRoot);
-
         UIManager.OpenUI("LobbyPanel");
         UIManager.OpenUI("UpInfoPanel");
     }

@@ -22,7 +22,7 @@ public class GameManager : Singleton<GameManager>  {
         while (!SceneSync.isDone)
         {
             SceneLoadingValue = SceneSync.progress;
-            ViewDebug(SceneLoadingValue);
+            ViewDebug("SceneLoading : " + SceneLoadingValue);
             yield return null;
         }
 

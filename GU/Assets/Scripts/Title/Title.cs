@@ -12,6 +12,7 @@ public class Title : MonoBehaviour {
 
 	void Start () {
         GameReady = false;
+        UiProgressBar.gameObject.SetActive(false);
         UiProgressBar.value = 0;
         ClientVersionCheck();
 	}
@@ -64,10 +65,14 @@ public class Title : MonoBehaviour {
         }
     }
 
+    // 순차적으로 데이터 불러옴 (에셋번들 불러온 다음 Json데이터 불러옴)
     IEnumerator _Login()
     {
+        // 에셋번들
         yield return StartCoroutine(_LoadTextureData());
         yield return StartCoroutine(_LoadUnitData());
+
+        // Json 데이터
         yield return StartCoroutine(_LoadTableData());
         yield return StartCoroutine(_LoadConfigData());
     }
@@ -91,6 +96,7 @@ public class Title : MonoBehaviour {
         if (www.error == null)
         {
             UiProgressBar.gameObject.SetActive(false);
+            www.assetBundle.Unload(false);
             AssetBundleLoad.TextureLoadReady = true;
         }
         else
@@ -115,6 +121,7 @@ public class Title : MonoBehaviour {
         if (www.error == null)
         {
             UiProgressBar.gameObject.SetActive(false);
+            www.assetBundle.Unload(false);
             AssetBundleLoad.UnitLoadReady = true;
         }
         else

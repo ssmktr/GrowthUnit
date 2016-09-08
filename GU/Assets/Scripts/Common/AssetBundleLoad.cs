@@ -60,7 +60,7 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
         else
         {
             UnitLoadReady = true;
-            GameManager.ViewDebug(www.text);
+            GameManager.ViewDebug(www.error);
         }
     }
     #endregion
@@ -113,7 +113,7 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
         else
         {
             TextureLoadReady = true;
-            GameManager.ViewDebug(www.text);
+            GameManager.ViewDebug(www.error);
         }
     }
     #endregion
