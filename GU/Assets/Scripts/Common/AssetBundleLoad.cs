@@ -20,7 +20,7 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
             yield return null;
 
         UnitLoadReady = false;
-        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/UnitData/UnitData.unity3d", GameInfo.UnitVersion);
+        WWW www = WWW.LoadFromCacheOrDownload(GameInfo.NetworkUrl + GameInfo.AssetBundlePath + "UnitData/UnitData.unity3d", GameInfo.UnitVersion);
         while (!www.isDone)
             yield return null;
 
@@ -77,7 +77,7 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
             yield return null;
 
         TextureLoadReady = false;
-        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TextureData/TextureData.unity3d", GameInfo.TextureVersion);
+        WWW www = WWW.LoadFromCacheOrDownload(GameInfo.NetworkUrl + GameInfo.AssetBundlePath + "/TextureData/TextureData.unity3d", GameInfo.TextureVersion);
         while (!www.isDone)
             yield return null;
 

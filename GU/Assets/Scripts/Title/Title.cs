@@ -24,7 +24,7 @@ public class Title : MonoBehaviour {
 
     IEnumerator _ClientVersionCheck()
     {
-        WWW www = new WWW("http://ssmktr.ivyro.net/GrowthUnit/VersionBase.json");
+        WWW www = new WWW(GameInfo.NetworkUrl + "VersionBase.json");
         yield return www;
 
         while (!www.isDone)
@@ -50,6 +50,21 @@ public class Title : MonoBehaviour {
                 double ClientVersion = JsonUtil.GetDoubleValue(DicData, "clientversion");
                 if (ClientVersion <= GameInfo.ClientVersion)
                 {
+                    if (DicData.ContainsKey("unitversion"))
+                        GameInfo.UnitVersion = JsonUtil.GetIntValue(DicData, "unitversion");
+
+                    if (DicData.ContainsKey("tableversion"))
+                        GameInfo.TableVersion = JsonUtil.GetIntValue(DicData, "tableversion");
+
+                    if (DicData.ContainsKey("textureversion"))
+                        GameInfo.TextureVersion = JsonUtil.GetIntValue(DicData, "textureversion");
+
+                    if (DicData.ContainsKey("soundversion"))
+                        GameInfo.SoundVersion = JsonUtil.GetIntValue(DicData, "soundversion");
+
+                    if (DicData.ContainsKey("effectversion"))
+                        GameInfo.EffectVersion = JsonUtil.GetIntValue(DicData, "effectversion");
+
                     if (DicData.ContainsKey("tableversion"))
                     {
                         // 게임에 필요한 데이터 받기
@@ -59,7 +74,12 @@ public class Title : MonoBehaviour {
                 else
                 {
                     // 앱 업데이트 하러 가기
-                    Application.OpenURL("http://www.google.com/");
+                    if (DicData.ContainsKey("updateurl"))
+                    {
+                        string updateurl = JsonUtil.GetStringValue(DicData, "updateurl");
+                        Debug.Log(updateurl);
+                        Application.OpenURL(updateurl);
+                    }
                 }
             }
         }
@@ -82,7 +102,7 @@ public class Title : MonoBehaviour {
     IEnumerator _LoadTextureData()
     {
         AssetBundleLoad.TextureLoadReady = false;
-        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TextureData/TextureData.unity3d", GameInfo.TextureVersion);
+        WWW www = WWW.LoadFromCacheOrDownload(GameInfo.NetworkUrl + GameInfo.AssetBundlePath + "TextureData/TextureData.unity3d", GameInfo.TextureVersion);
         while (!www.isDone)
         {
             UiProgressBar.gameObject.SetActive(true);
@@ -107,7 +127,7 @@ public class Title : MonoBehaviour {
     IEnumerator _LoadUnitData()
     {
         AssetBundleLoad.UnitLoadReady = false;
-        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/UnitData/UnitData.unity3d", GameInfo.UnitVersion);
+        WWW www = WWW.LoadFromCacheOrDownload(GameInfo.NetworkUrl + GameInfo.AssetBundlePath + "UnitData/UnitData.unity3d", GameInfo.UnitVersion);
         while (!www.isDone)
         {
             UiProgressBar.gameObject.SetActive(true);
@@ -131,7 +151,7 @@ public class Title : MonoBehaviour {
     #region UNITDATA
     IEnumerator _LoadTableData()
     {
-        WWW www = new WWW("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TableData/UnitData.json");
+        WWW www = new WWW(GameInfo.NetworkUrl + GameInfo.AssetBundlePath + "TableData/UnitData.json");
         while (!www.isDone)
         {
             UiProgressBar.gameObject.SetActive(true);
@@ -199,7 +219,7 @@ public class Title : MonoBehaviour {
     #region CONFIGDATA
     IEnumerator _LoadConfigData()
     {
-        WWW www = new WWW("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TableData/ConfigData.json");
+        WWW www = new WWW(GameInfo.NetworkUrl + GameInfo.AssetBundlePath + "TableData/ConfigData.json");
         while (!www.isDone)
         {
             UiProgressBar.gameObject.SetActive(true);
