@@ -3,9 +3,9 @@ using System.Collections;
 
 public class AssetBundleLoad : Singleton<AssetBundleLoad> {
 
-    static bool UnitLoadReady = true;
-    static bool TextureLoadReady = true;
-    static bool TableLoadReady = true;
+    public static bool UnitLoadReady = true;
+    public static bool TextureLoadReady = true;
+    public static bool TableLoadReady = true;
 
     #region UNITLOAD
     // 유닛 에셋번들 로드
@@ -20,11 +20,11 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
             yield return null;
 
         UnitLoadReady = false;
-        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/UnitDatas/UnitDatas.unity3d", GameInfo.UnitVersion);
-        yield return www;
-
+        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/UnitData/UnitData.unity3d", GameInfo.UnitVersion);
         while (!www.isDone)
             yield return null;
+
+        yield return www;
 
         if (www.error == null)
         {
@@ -77,11 +77,11 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
             yield return null;
 
         TextureLoadReady = false;
-        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TextureDatas/TextureDatas.unity3d", GameInfo.TextureVersion);
-        yield return www;
-
+        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TextureData/TextureData.unity3d", GameInfo.TextureVersion);
         while (!www.isDone)
             yield return null;
+
+        yield return www;
 
         if (www.error == null)
         {

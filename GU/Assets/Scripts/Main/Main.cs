@@ -6,15 +6,18 @@ public class Main : MonoBehaviour {
     public UICamera UiCamera;
     public GameObject UIRoot, SystemRoot;
 
-	void Start () {
+    IEnumerator Start () {
         if (!Title.GameReady)
         {
-            GameManager.GoScene("Title");
-            return;
+            //GameManager.GoScene("Title");
+            StartCoroutine(GameManager._SceneLoading("Title"));
+            yield break;
         }
+
         UIManager.Instance.SetManager(UIRoot, SystemRoot);
 
         UIManager.OpenUI("LobbyPanel");
         UIManager.OpenUI("UpInfoPanel");
     }
 }
+

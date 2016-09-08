@@ -8,19 +8,13 @@ public class Title : MonoBehaviour {
     public static bool GameReady = false;
 
     public UICamera UiCamera;
+    public UIProgressBar UiProgressBar;
 
 	void Start () {
         GameReady = false;
+        UiProgressBar.value = 0;
         ClientVersionCheck();
 	}
-
-    void Update()
-    {
-        if (GameReady)
-        {
-            GameManager.GoScene("Main");
-        }
-    }
 
     void ClientVersionCheck()
     {
@@ -72,22 +66,78 @@ public class Title : MonoBehaviour {
 
     IEnumerator _Login()
     {
+        yield return StartCoroutine(_LoadTextureData());
+        yield return StartCoroutine(_LoadUnitData());
         yield return StartCoroutine(_LoadTableData());
         yield return StartCoroutine(_LoadConfigData());
     }
 
-    #region JSONDATA
-    #region UNITDATA
-    IEnumerator _LoadTableData()
+    #region DATA
+    #region
+    IEnumerator _LoadTextureData()
     {
-        WWW www = new WWW("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TableDatas/UnitData.json");
-        yield return www;
-
+        AssetBundleLoad.TextureLoadReady = false;
+        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TextureData/TextureData.unity3d", GameInfo.TextureVersion);
         while (!www.isDone)
+        {
+            UiProgressBar.gameObject.SetActive(true);
+            UiProgressBar.value = www.progress;
+            UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
             yield return null;
+        }
+
+        yield return www;
 
         if (www.error == null)
         {
+            UiProgressBar.gameObject.SetActive(false);
+            AssetBundleLoad.TextureLoadReady = true;
+        }
+        else
+            GameManager.ViewDebug(www.error);
+    }
+    #endregion
+    #region UNITDATA
+    IEnumerator _LoadUnitData()
+    {
+        AssetBundleLoad.UnitLoadReady = false;
+        WWW www = WWW.LoadFromCacheOrDownload("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/UnitData/UnitData.unity3d", GameInfo.UnitVersion);
+        while (!www.isDone)
+        {
+            UiProgressBar.gameObject.SetActive(true);
+            UiProgressBar.value = www.progress;
+            UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+            yield return null;
+        }
+
+        yield return www;
+
+        if (www.error == null)
+        {
+            UiProgressBar.gameObject.SetActive(false);
+            AssetBundleLoad.UnitLoadReady = true;
+        }
+        else
+            GameManager.ViewDebug(www.error);
+    }
+    #endregion
+    #region UNITDATA
+    IEnumerator _LoadTableData()
+    {
+        WWW www = new WWW("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TableData/UnitData.json");
+        while (!www.isDone)
+        {
+            UiProgressBar.gameObject.SetActive(true);
+            UiProgressBar.value = www.progress;
+            UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+            yield return null;
+        }
+
+        yield return www;
+
+        if (www.error == null)
+        {
+            UiProgressBar.gameObject.SetActive(false);
             GameManager.ViewDebug("UnitData : " + www.text);
             SetUnitDataBase(www.text);
         }
@@ -142,14 +192,20 @@ public class Title : MonoBehaviour {
     #region CONFIGDATA
     IEnumerator _LoadConfigData()
     {
-        WWW www = new WWW("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TableDatas/ConfigData.json");
-        yield return www;
-
+        WWW www = new WWW("http://ssmktr.ivyro.net/GrowthUnit/AssetBundle/TableData/ConfigData.json");
         while (!www.isDone)
+        {
+            UiProgressBar.gameObject.SetActive(true);
+            UiProgressBar.value = www.progress;
+            UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
             yield return null;
+        }
+
+        yield return www;
 
         if (www.error == null)
         {
+            UiProgressBar.gameObject.SetActive(false);
             GameManager.ViewDebug("ConfigData : " + www.text);
             SetConfigData(www.text);
         }
@@ -175,7 +231,10 @@ public class Title : MonoBehaviour {
         }
 
         GameReady = true;
+        StartCoroutine(GameManager._SceneLoading("Main"));
     }
     #endregion
     #endregion
+
+    
 }
