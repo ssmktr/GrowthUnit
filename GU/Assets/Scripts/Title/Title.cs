@@ -93,8 +93,8 @@ public class Title : MonoBehaviour {
         yield return StartCoroutine(_LoadUnitData());
 
         // Json 데이터
-        yield return StartCoroutine(_LoadTableData());
-        yield return StartCoroutine(_LoadConfigData());
+        yield return StartCoroutine(_LoadUnitTableData());
+        yield return StartCoroutine(_LoadConfigTableData());
     }
 
     #region DATA
@@ -105,9 +105,12 @@ public class Title : MonoBehaviour {
         WWW www = WWW.LoadFromCacheOrDownload(GameInfo.AssetBundleUrl + "TextureData/TextureData.unity3d", GameInfo.TextureVersion);
         while (!www.isDone)
         {
-            UiProgressBar.gameObject.SetActive(true);
-            UiProgressBar.value = www.progress;
-            UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+            if (www.progress > 0)
+            {
+                UiProgressBar.gameObject.SetActive(true);
+                UiProgressBar.value = www.progress;
+                UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+            }
             yield return null;
         }
 
@@ -130,9 +133,12 @@ public class Title : MonoBehaviour {
         WWW www = WWW.LoadFromCacheOrDownload(GameInfo.AssetBundleUrl + "UnitData/UnitData.unity3d", GameInfo.UnitVersion);
         while (!www.isDone)
         {
-            UiProgressBar.gameObject.SetActive(true);
-            UiProgressBar.value = www.progress;
-            UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+            if (www.progress > 0)
+            {
+                UiProgressBar.gameObject.SetActive(true);
+                UiProgressBar.value = www.progress;
+                UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+            }
             yield return null;
         }
 
@@ -149,14 +155,17 @@ public class Title : MonoBehaviour {
     }
     #endregion
     #region UNITDATA
-    IEnumerator _LoadTableData()
+    IEnumerator _LoadUnitTableData()
     {
         WWW www = new WWW(GameInfo.AssetBundleUrl + "TableData/UnitData.json");
         while (!www.isDone)
         {
-            UiProgressBar.gameObject.SetActive(true);
-            UiProgressBar.value = www.progress;
-            UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+            if (www.progress > 0)
+            {
+                UiProgressBar.gameObject.SetActive(true);
+                UiProgressBar.value = www.progress;
+                UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+            }
             yield return null;
         }
 
@@ -166,13 +175,13 @@ public class Title : MonoBehaviour {
         {
             UiProgressBar.gameObject.SetActive(false);
             GameManager.ViewDebug("UnitData : " + www.text);
-            SetUnitDataBase(www.text);
+            SetUnitTableData(www.text);
         }
         else
             GameManager.ViewDebug(www.error);
     }
 
-    void SetUnitDataBase(string _Content)
+    void SetUnitTableData(string _Content)
     {
         string Content = _Content.Trim();
         DataManager.ListUnitDataBase.Clear();
@@ -217,14 +226,17 @@ public class Title : MonoBehaviour {
     }
     #endregion
     #region CONFIGDATA
-    IEnumerator _LoadConfigData()
+    IEnumerator _LoadConfigTableData()
     {
         WWW www = new WWW(GameInfo.AssetBundleUrl + "TableData/ConfigData.json");
         while (!www.isDone)
         {
-            UiProgressBar.gameObject.SetActive(true);
-            UiProgressBar.value = www.progress;
-            UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+            if (www.progress > 0)
+            {
+                UiProgressBar.gameObject.SetActive(true);
+                UiProgressBar.value = www.progress;
+                UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+            }
             yield return null;
         }
 
@@ -234,13 +246,13 @@ public class Title : MonoBehaviour {
         {
             UiProgressBar.gameObject.SetActive(false);
             GameManager.ViewDebug("ConfigData : " + www.text);
-            SetConfigData(www.text);
+            SetConfigTableData(www.text);
         }
         else
             GameManager.ViewDebug(www.error);
     }
 
-    void SetConfigData(string _Content)
+    void SetConfigTableData(string _Content)
     {
         string Content = _Content.Trim();
         DataManager.DicConfig.Clear();
