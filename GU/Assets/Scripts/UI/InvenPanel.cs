@@ -4,7 +4,7 @@ using System.Collections;
 public class InvenPanel : UIBasePanel {
     GameObject ModelObj;
 
-    public GameObject BackBtn;
+    public GameObject BackBtn, CreateBtn, IdleBtn, DeadBtn, WalkBtn, RunBtn, AttackBtn, SkillBtn;
     public GameObject ModelRoot;
 
     int SelectUnitId = 0;
@@ -18,6 +18,47 @@ public class InvenPanel : UIBasePanel {
             Hide();
             UIManager.OpenUI("LobbyPanel");
         };
+
+        UIEventListener.Get(CreateBtn).onClick = (sender) =>
+        {
+            CreateModel(DataManager.ListUnitDataBase[Random.Range(0, DataManager.ListUnitDataBase.Count)]);
+        };
+
+        UIEventListener.Get(IdleBtn).onClick = (sender) => 
+        {
+            if (ModelObj != null)
+                ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Idle);
+        };
+
+        UIEventListener.Get(DeadBtn).onClick = (sender) =>
+        {
+            if (ModelObj != null)
+                ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Dead);
+        };
+
+        UIEventListener.Get(WalkBtn).onClick = (sender) =>
+        {
+            if (ModelObj != null)
+                ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Walk);
+        };
+
+        UIEventListener.Get(RunBtn).onClick = (sender) =>
+        {
+            if (ModelObj != null)
+                ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Run);
+        };
+
+        UIEventListener.Get(AttackBtn).onClick = (sender) =>
+        {
+            if (ModelObj != null)
+                ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Attack);
+        };
+
+        UIEventListener.Get(SkillBtn).onClick = (sender) =>
+        {
+            if (ModelObj != null)
+                ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Skill);
+        };
     }
 
     public override void LateInit()
@@ -29,11 +70,6 @@ public class InvenPanel : UIBasePanel {
             Destroy(ModelObj);
             ModelObj = null;
         }
-
-        for (int i = 0; i < DataManager.ListUnitDataBase.Count; ++i)
-        {
-            CreateModel(DataManager.ListUnitDataBase[i]);
-        }
     }
 
     void CreateModel(UnitDataBase.Data _UnitData)
@@ -44,11 +80,18 @@ public class InvenPanel : UIBasePanel {
             ModelObj = null;
         }
 
-        AssetBundleLoad.Instance.AssetUnitLoad(_UnitData.name, (go) => {
-            ModelObj = go;
-            ModelObj.transform.localPosition = Vector3.zero;
-            ModelObj.transform.localScale = new Vector3(-100, 100, 100) * _UnitData.cardsize;
+        if (ModelObj == null)
+        {
+            AssetBundleLoad.Instance.AssetUnitLoad(_UnitData.name, (go) => {
+                go.transform.localPosition = Vector3.zero;
+                go.transform.localScale = new Vector3(-100, 100, 100) * _UnitData.cardsize;
 
-        }, ModelRoot);
+                if (!go.GetComponent<UnitBaseCtrl>())
+                    go.AddComponent<UnitBaseCtrl>();
+
+                ModelObj = go;
+
+            }, ModelRoot);
+        }
     }
 }
