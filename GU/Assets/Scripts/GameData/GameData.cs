@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class UnitDataBase {
 
@@ -17,4 +17,19 @@ public class UnitDataBase {
         public float cardsize = 0f;
         public float attackrange = 0f;
     };
-}
+};
+
+public class StageDataBase
+{
+    public class Data
+    {
+        public int id = 0;
+        public int accountexp = 0;
+        public int unitexp = 0;
+        public int rewardgold = 0;
+        public List<int> ListEnemyId = new List<int>();
+        public int enemycount = 0;
+        public List<int> ListBossId = new List<int>();
+        public int bosscount = 0;
+    };
+};

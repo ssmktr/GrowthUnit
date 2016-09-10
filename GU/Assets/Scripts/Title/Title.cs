@@ -88,6 +88,7 @@ public class Title : MonoBehaviour {
 
         // Json 데이터
         yield return StartCoroutine(_LoadUnitTableData());
+        yield return StartCoroutine(_LoadStageTableData());
         yield return StartCoroutine(_LoadConfigTableData());
     }
 
@@ -221,6 +222,95 @@ public class Title : MonoBehaviour {
                     data.cardsize = JsonUtil.GetFloatValue(DicData, "cardsize");
 
                 DataManager.ListUnitDataBase.Add(data);
+            }
+        }
+    }
+    #endregion
+    #region STAGEDATA
+    IEnumerator _LoadStageTableData()
+    {
+        WWW www = new WWW(GameInfo.AssetBundleUrl + "TableData/StageData.json");
+        while (!www.isDone)
+        {
+            if (www.progress > 0)
+            {
+                UiProgressBar.gameObject.SetActive(true);
+                UiProgressBar.value = www.progress;
+                UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+                yield return null;
+            }
+        }
+
+        yield return www;
+
+        if (www.error == null)
+        {
+            UiProgressBar.gameObject.SetActive(false);
+            GameManager.ViewDebug("StageData : " + www.text);
+            SetStageTableData(www.text);
+        }
+        else
+            GameManager.ViewDebug(www.error);
+    }
+
+    void SetStageTableData(string _Content)
+    {
+        string Content = _Content.Trim();
+        DataManager.ListStageDataBase.Clear();
+        List<object> ListData = Json.Deserialize(Content) as List<object>;
+        if (ListData != null)
+        {
+            for (int i = 0; i < ListData.Count; ++i)
+            {
+                Dictionary<string, object> DicData = ListData[i] as Dictionary<string, object>;
+                if (DicData != null)
+                {
+                    StageDataBase.Data data = new StageDataBase.Data();
+                    if (DicData.ContainsKey("id"))
+                        data.id = JsonUtil.GetIntValue(DicData, "id");
+
+                    if (DicData.ContainsKey("accountexp"))
+                        data.accountexp = JsonUtil.GetIntValue(DicData, "accountexp");
+
+                    if (DicData.ContainsKey("unitexp"))
+                        data.unitexp = JsonUtil.GetIntValue(DicData, "unitexp");
+
+                    if (DicData.ContainsKey("rewardgold"))
+                        data.rewardgold = JsonUtil.GetIntValue(DicData, "rewardgold");
+
+                    if (DicData.ContainsKey("rewardgold"))
+                        data.rewardgold = JsonUtil.GetIntValue(DicData, "rewardgold");
+
+                    if (DicData.ContainsKey("enemylist"))
+                    {
+                        data.ListEnemyId.Clear();
+                        List<int> ListEnemy = Json.Deserialize(JsonUtil.GetStringValue(DicData, "enemylist")) as List<int>;
+                        if (ListEnemy != null)
+                        {
+                            for (int iEnemy = 0; iEnemy < ListEnemy.Count; ++iEnemy)
+                                data.ListEnemyId.Add(ListEnemy[iEnemy]);
+                        }
+                    }
+
+                    if (DicData.ContainsKey("enemycount"))
+                        data.enemycount = JsonUtil.GetIntValue(DicData, "enemycount");
+
+                    if (DicData.ContainsKey("bosslist"))
+                    {
+                        data.ListBossId.Clear();
+                        List<int> ListBoss = Json.Deserialize(JsonUtil.GetStringValue(DicData, "bosslist")) as List<int>;
+                        if (ListBoss != null)
+                        {
+                            for (int iBoss = 0; iBoss < ListBoss.Count; ++iBoss)
+                                data.ListBossId.Add(ListBoss[iBoss]);
+                        }
+                    }
+
+                    if (DicData.ContainsKey("bosscount"))
+                        data.bosscount = JsonUtil.GetIntValue(DicData, "bosscount");
+
+                    DataManager.ListStageDataBase.Add(data);
+                }
             }
         }
     }
