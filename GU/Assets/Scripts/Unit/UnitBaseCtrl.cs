@@ -7,7 +7,6 @@ public class UnitBaseCtrl : MonoBehaviour {
     {
         Idle = 0,
         Walk,
-        Run,
         Dead,
         Attack,
         Skill,
@@ -19,7 +18,7 @@ public class UnitBaseCtrl : MonoBehaviour {
 	void Start () {
         if (Anim == null)
             Anim = gameObject.GetComponent<Animator>();
-
+        
         Anim.Play(eAnimType.ToString());
 
     }

@@ -9,6 +9,8 @@ public class InvenPanel : UIBasePanel {
 
     int SelectUnitId = 0;
 
+    int idx = 0;
+
     public override void Init()
     {
         base.Init();
@@ -21,7 +23,9 @@ public class InvenPanel : UIBasePanel {
 
         UIEventListener.Get(CreateBtn).onClick = (sender) =>
         {
-            CreateModel(DataManager.ListUnitDataBase[Random.Range(0, DataManager.ListUnitDataBase.Count)]);
+            //CreateModel(DataManager.ListUnitDataBase[Random.Range(0, DataManager.ListUnitDataBase.Count)]);
+            CreateModel(DataManager.ListUnitDataBase[idx]);
+            idx++;
         };
 
         UIEventListener.Get(IdleBtn).onClick = (sender) => 
@@ -85,9 +89,6 @@ public class InvenPanel : UIBasePanel {
             AssetBundleLoad.Instance.AssetUnitLoad(_UnitData.name, (go) => {
                 go.transform.localPosition = Vector3.zero;
                 go.transform.localScale = new Vector3(-100, 100, 100) * _UnitData.cardsize;
-
-                if (!go.GetComponent<UnitBaseCtrl>())
-                    go.AddComponent<UnitBaseCtrl>();
 
                 ModelObj = go;
 

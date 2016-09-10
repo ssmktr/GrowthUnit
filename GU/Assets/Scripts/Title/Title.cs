@@ -154,7 +154,7 @@ public class Title : MonoBehaviour {
             GameManager.ViewDebug(www.error);
     }
     #endregion
-    #region UNITDATA
+    #region UNITJSONDATA
     IEnumerator _LoadUnitTableData()
     {
         WWW www = new WWW(GameInfo.AssetBundleUrl + "TableData/UnitData.json");
@@ -202,6 +202,9 @@ public class Title : MonoBehaviour {
                 if (DicData.ContainsKey("type"))
                     data.type = JsonUtil.GetIntValue(DicData, "type");
 
+                if (DicData.ContainsKey("classtype"))
+                    data.classtype = JsonUtil.GetIntValue(DicData, "classtype");
+
                 if (DicData.ContainsKey("move_speed"))
                     data.move_speed = JsonUtil.GetFloatValue(DicData, "move_speed");
 
@@ -217,6 +220,9 @@ public class Title : MonoBehaviour {
                 if (DicData.ContainsKey("cri"))
                     data.cri = JsonUtil.GetFloatValue(DicData, "cri");
 
+                if (DicData.ContainsKey("attackrange"))
+                    data.attackrange = JsonUtil.GetFloatValue(DicData, "attackrange");
+
                 if (DicData.ContainsKey("cardsize"))
                     data.cardsize = JsonUtil.GetFloatValue(DicData, "cardsize");
 
@@ -225,7 +231,7 @@ public class Title : MonoBehaviour {
         }
     }
     #endregion
-    #region CONFIGDATA
+    #region CONFIGSJONDATA
     IEnumerator _LoadConfigTableData()
     {
         WWW www = new WWW(GameInfo.AssetBundleUrl + "TableData/ConfigData.json");

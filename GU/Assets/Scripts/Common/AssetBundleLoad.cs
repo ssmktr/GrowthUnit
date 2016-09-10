@@ -43,6 +43,10 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
                         if (_parent != null)
                             obj.transform.parent = _parent.transform;
                         obj.transform.localScale = Vector3.one * _size;
+
+                        if (!obj.GetComponent<UnitBaseCtrl>())
+                            obj.AddComponent<UnitBaseCtrl>();
+
                         bundle.Unload(false);
                         UnitLoadReady = true;
 
