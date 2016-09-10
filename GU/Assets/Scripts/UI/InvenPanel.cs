@@ -4,7 +4,7 @@ using System.Collections;
 public class InvenPanel : UIBasePanel {
     GameObject ModelObj;
 
-    public GameObject BackBtn, CreateBtn, IdleBtn, DeadBtn, WalkBtn, RunBtn, AttackBtn, SkillBtn;
+    public GameObject BackBtn, CreateBtn, IdleBtn, DeadBtn, WalkBtn, AttackBtn, SkillBtn;
     public GameObject ModelRoot;
 
     int SelectUnitId = 0;
@@ -23,7 +23,6 @@ public class InvenPanel : UIBasePanel {
 
         UIEventListener.Get(CreateBtn).onClick = (sender) =>
         {
-            //CreateModel(DataManager.ListUnitDataBase[Random.Range(0, DataManager.ListUnitDataBase.Count)]);
             CreateModel(DataManager.ListUnitDataBase[idx]);
             idx++;
         };
@@ -44,12 +43,6 @@ public class InvenPanel : UIBasePanel {
         {
             if (ModelObj != null)
                 ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Walk);
-        };
-
-        UIEventListener.Get(RunBtn).onClick = (sender) =>
-        {
-            if (ModelObj != null)
-                ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Run);
         };
 
         UIEventListener.Get(AttackBtn).onClick = (sender) =>

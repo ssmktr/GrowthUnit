@@ -5,7 +5,6 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
 
     public static bool UnitLoadReady = true;
     public static bool TextureLoadReady = true;
-    public static bool TableLoadReady = true;
 
     #region UNITLOAD
     // 유닛 에셋번들 로드

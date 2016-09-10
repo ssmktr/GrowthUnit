@@ -53,9 +53,6 @@ public class Title : MonoBehaviour {
                     if (DicData.ContainsKey("unitversion"))
                         GameInfo.UnitVersion = JsonUtil.GetIntValue(DicData, "unitversion");
 
-                    if (DicData.ContainsKey("tableversion"))
-                        GameInfo.TableVersion = JsonUtil.GetIntValue(DicData, "tableversion");
-
                     if (DicData.ContainsKey("textureversion"))
                         GameInfo.TextureVersion = JsonUtil.GetIntValue(DicData, "textureversion");
 
@@ -65,11 +62,8 @@ public class Title : MonoBehaviour {
                     if (DicData.ContainsKey("effectversion"))
                         GameInfo.EffectVersion = JsonUtil.GetIntValue(DicData, "effectversion");
 
-                    if (DicData.ContainsKey("tableversion"))
-                    {
-                        // 게임에 필요한 데이터 받기
-                        StartCoroutine(_Login());
-                    }
+                    // 게임에 필요한 데이터 받기
+                    StartCoroutine(_Login());
                 }
                 else
                 {

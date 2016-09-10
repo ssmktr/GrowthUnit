@@ -11,7 +11,6 @@ public class GameInfo {
     public const bool DevelopMode = true;
 
     public static int UnitVersion = 0;
-    public static int TableVersion = 0;
     public static int TextureVersion = 0;
     public static int SoundVersion = 0;
     public static int EffectVersion = 0;
