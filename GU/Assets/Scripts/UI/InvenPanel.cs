@@ -4,8 +4,9 @@ using System.Collections;
 public class InvenPanel : UIBasePanel {
     GameObject ModelObj;
 
-    public GameObject BackBtn, CreateBtn, IdleBtn, DeadBtn, WalkBtn, AttackBtn, SkillBtn;
+    public GameObject BackBtn;
     public GameObject ModelRoot;
+    public UILabel nameLbl;
 
     int SelectUnitId = 0;
 
@@ -20,53 +21,20 @@ public class InvenPanel : UIBasePanel {
             Hide();
             UIManager.OpenUI("LobbyPanel");
         };
-
-        UIEventListener.Get(CreateBtn).onClick = (sender) =>
-        {
-            CreateModel(DataManager.ListUnitDataBase[idx]);
-            idx++;
-        };
-
-        UIEventListener.Get(IdleBtn).onClick = (sender) => 
-        {
-            if (ModelObj != null)
-                ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Idle);
-        };
-
-        UIEventListener.Get(DeadBtn).onClick = (sender) =>
-        {
-            if (ModelObj != null)
-                ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Dead);
-        };
-
-        UIEventListener.Get(WalkBtn).onClick = (sender) =>
-        {
-            if (ModelObj != null)
-                ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Walk);
-        };
-
-        UIEventListener.Get(AttackBtn).onClick = (sender) =>
-        {
-            if (ModelObj != null)
-                ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Attack);
-        };
-
-        UIEventListener.Get(SkillBtn).onClick = (sender) =>
-        {
-            if (ModelObj != null)
-                ModelObj.GetComponent<UnitBaseCtrl>().SetAnim(UnitBaseCtrl.AnimType.Skill);
-        };
     }
 
     public override void LateInit()
     {
         base.LateInit();
 
+        nameLbl.text = "";
         if (ModelObj != null)
         {
             Destroy(ModelObj);
             ModelObj = null;
         }
+
+        CreateModel(DataManager.ListUnitDataBase[Random.Range(0, DataManager.ListUnitDataBase.Count)]);
     }
 
     void CreateModel(UnitDataBase.Data _UnitData)
@@ -75,6 +43,7 @@ public class InvenPanel : UIBasePanel {
         {
             Destroy(ModelObj);
             ModelObj = null;
+            nameLbl.text = "";
         }
 
         if (ModelObj == null)
@@ -82,10 +51,16 @@ public class InvenPanel : UIBasePanel {
             AssetBundleLoad.Instance.AssetUnitLoad(_UnitData.name, (go) => {
                 go.transform.localPosition = Vector3.zero;
                 go.transform.localScale = new Vector3(-100, 100, 100) * _UnitData.cardsize;
+                UIManager.SetLayer(go.transform, 8);
+                Renderer[] render = go.GetComponentsInChildren<Renderer>();
+                for (int i = 0; i < render.Length; ++i)
+                    render[i].sortingOrder += 1;
 
                 ModelObj = go;
 
             }, ModelRoot);
+
+            nameLbl.text = _UnitData.name;
         }
     }
 }

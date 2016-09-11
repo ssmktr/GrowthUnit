@@ -352,8 +352,8 @@ public class Title : MonoBehaviour {
             if (DicData.ContainsKey("CreateGold"))
                 DataManager.DicConfig.Add("CreateGold", JsonUtil.GetIntValue(DicData, "CreateGold"));
 
-            if (DicData.ContainsKey("CreateRuby"))
-                DataManager.DicConfig.Add("CreateRuby", JsonUtil.GetIntValue(DicData, "CreateRuby"));
+            if (DicData.ContainsKey("CreateDia"))
+                DataManager.DicConfig.Add("CreateDia", JsonUtil.GetIntValue(DicData, "CreateDia"));
 
             if (DicData.ContainsKey("CreateHeart"))
                 DataManager.DicConfig.Add("CreateHeart", JsonUtil.GetIntValue(DicData, "CreateHeart"));

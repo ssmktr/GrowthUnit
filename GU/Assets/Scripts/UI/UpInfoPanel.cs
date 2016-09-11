@@ -14,7 +14,7 @@ public class UpInfoPanel : UIBasePanel {
     {
         base.LateInit();
 
-        AssetBundleLoad.Instance.AssetTextureLoad("BackGround2", (tex) => {
+        AssetBundleLoad.Instance.AssetTextureLoad("DesertBackGround", (tex) => {
             if (tex != null)
                 MainBack.mainTexture = tex;
         });

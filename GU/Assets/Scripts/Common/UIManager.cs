@@ -158,4 +158,14 @@ public class UIManager : Singleton<UIManager> {
     {
         OpenUI("Popup/ToastMessagePopup").GetComponent<ToastMessagePopup>().SetData(msg);
     }
+
+
+
+    // Root부터 하위 모든 오브젝트의 레이어를 _Layer로 바꾼다
+    public static void SetLayer(Transform _Root, int _Layer)
+    {
+        Transform[] trans = _Root.GetComponentsInChildren<Transform>();
+        for (int i = 0; i < trans.Length; ++i)
+            trans[i].gameObject.layer = _Layer;
+    }
 }
