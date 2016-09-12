@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using MiniJSON;
+
 public class InvenPanel : UIBasePanel {
     GameObject ModelObj;
 

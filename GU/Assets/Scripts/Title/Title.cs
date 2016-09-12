@@ -284,11 +284,11 @@ public class Title : MonoBehaviour {
                     if (DicData.ContainsKey("enemylist"))
                     {
                         data.ListEnemyId.Clear();
-                        List<int> ListEnemy = Json.Deserialize(JsonUtil.GetStringValue(DicData, "enemylist")) as List<int>;
+                        List<object> ListEnemy = Json.Deserialize(JsonUtil.GetStringValue(DicData, "enemylist")) as List<object>;
                         if (ListEnemy != null)
                         {
                             for (int iEnemy = 0; iEnemy < ListEnemy.Count; ++iEnemy)
-                                data.ListEnemyId.Add(ListEnemy[iEnemy]);
+                                data.ListEnemyId.Add(int.Parse(ListEnemy[iEnemy].ToString()));
                         }
                     }
 
@@ -298,11 +298,11 @@ public class Title : MonoBehaviour {
                     if (DicData.ContainsKey("bosslist"))
                     {
                         data.ListBossId.Clear();
-                        List<int> ListBoss = Json.Deserialize(JsonUtil.GetStringValue(DicData, "bosslist")) as List<int>;
+                        List<object> ListBoss = Json.Deserialize(JsonUtil.GetStringValue(DicData, "bosslist")) as List<object>;
                         if (ListBoss != null)
                         {
                             for (int iBoss = 0; iBoss < ListBoss.Count; ++iBoss)
-                                data.ListBossId.Add(ListBoss[iBoss]);
+                                data.ListBossId.Add(int.Parse(ListBoss[iBoss].ToString()));
                         }
                     }
 
