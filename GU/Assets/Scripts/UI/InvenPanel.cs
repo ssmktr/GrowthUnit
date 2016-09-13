@@ -20,8 +20,9 @@ public class InvenPanel : UIBasePanel {
 
         UIEventListener.Get(BackBtn).onClick = (sender) =>
         {
-            Hide();
-            UIManager.OpenUI("LobbyPanel");
+            //    Hide();
+            //    UIManager.OpenUI("LobbyPanel");
+            UIManager.Instance.Prev();
         };
     }
 
