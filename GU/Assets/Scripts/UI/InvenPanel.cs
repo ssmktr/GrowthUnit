@@ -10,10 +10,6 @@ public class InvenPanel : UIBasePanel {
     public GameObject ModelRoot;
     public UILabel nameLbl;
 
-    int SelectUnitId = 0;
-
-    int idx = 0;
-
     public override void Init()
     {
         base.Init();

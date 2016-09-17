@@ -343,36 +343,7 @@ public class ObjectPaging : MonoBehaviour {
             }
         }
     }
-
-    public void NowCreate2(int _CreateMaxCount)
-    {
-        //< 맥스 카운트 대입
-        MaxIndex = _CreateMaxCount - 1;
-
-        //< 맥스카운트 보정
-        if (MaxIndex < FirstCreateCount)
-            MaxIndex = FirstCreateCount;
-
-        //if (MaxIndex < NowIndex)
-        //    NowIndex = MaxIndex;
-
-        //< 현재 생성되어있는 녀석들의 정보를 갱신
-        int count = 0;
-        int StartCount = (NowIndex - FirstCreateCount);
-        if (StartCount < 0)
-            StartCount = 0;
-
-        //< 정보 갱신
-        for (int i = 0; i < RecycleObjectList.Count; i++)
-        {
-            if (CreateCallBack != null)
-            {
-                CreateCallBack(StartCount + count, RecycleObjectList[i]);
-                count++;
-            }
-        }
-    }
-
+    
     public void SetIndex(int index)
     {
         NowIndex = index;

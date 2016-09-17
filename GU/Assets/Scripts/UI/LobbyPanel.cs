@@ -3,7 +3,7 @@ using System.Collections;
 
 public class LobbyPanel : UIBasePanel {
 
-    public GameObject InvenBtn, ReadyBtn;
+    public GameObject InvenBtn, ReadyBtn, CollectionBtn;
 
     public override void Init()
     {
@@ -19,6 +19,12 @@ public class LobbyPanel : UIBasePanel {
         {
             Hide();
             UIManager.OpenUI("ReadyPanel");
+        };
+
+        UIEventListener.Get(CollectionBtn).onClick = (sender) =>
+        {
+            Hide();
+            UIManager.OpenUI("CollectionPanel");
         };
     }
 

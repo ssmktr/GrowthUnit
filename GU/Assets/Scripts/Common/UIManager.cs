@@ -142,7 +142,6 @@ public class UIManager : Singleton<UIManager> {
             if (CurPanel.name == ListPanel[i].name)
             {
                 CurPanel = ListPanel[i + 1];
-                UIBasePanel panel = ListPanel[i];
                 ListPanel.RemoveAt(i);
                 break;
             }
