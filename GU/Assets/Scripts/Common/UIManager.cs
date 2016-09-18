@@ -112,9 +112,15 @@ public class UIManager : Singleton<UIManager> {
             }
             else if (PrevIdx >= 0)
             {
-                ListPanel[CurIdx].Hide();
-                ListPanel[PrevIdx].LateInit();
-                CurPanel = ListPanel[PrevIdx];
+                UIBasePanel curPanel = ListPanel[CurIdx];
+                curPanel.Hide();
+                ListPanel.Remove(curPanel);
+                ListPanel.Add(curPanel);
+
+                //ListPanel[PrevIdx].LateInit();
+                //CurPanel = ListPanel[PrevIdx];
+                ListPanel[CurIdx].LateInit();
+                CurPanel = ListPanel[CurIdx];
                 CurPanel.Prev();
             }
         }
