@@ -5,6 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>  {
 
+    public int Energy = 1000000;
+    public int Gold = 0;
+    public int Dia = 0;
+    public int Heart = 0;
+
+    public int MaxEnergy
+    {
+        get
+        {
+
+            return 10;
+        }
+    }
+
     public static AsyncOperation SceneSync = null;
     public static float SceneLoadingValue = 0f;
 

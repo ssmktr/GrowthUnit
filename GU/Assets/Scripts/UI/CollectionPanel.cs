@@ -52,6 +52,7 @@ public class CollectionPanel : UIBasePanel {
             {
                 TabGroup[i].transform.FindChild("BackGround").gameObject.SetActive(true);
                 BaseGroup[i].SetActive(true);
+
                 if (eTabType == TabType.Human)
                     CreateHumanList();
                 else if (eTabType == TabType.Undead)
@@ -71,10 +72,10 @@ public class CollectionPanel : UIBasePanel {
     ObjectPaging HumanPaging;
     public UIScrollView HumanScrollView;
     public UIGrid HumanGrid;
-    List<UnitDataBase.SlotData> UnitData = new List<UnitDataBase.SlotData>();
+    List<UnitDataBase.SlotData> HumanData = new List<UnitDataBase.SlotData>();
     void CreateHumanList()
     {
-        UnitData.Clear();
+        HumanData.Clear();
         // 인간만 추가
         for (int i = 0; i < DataManager.ListUnitDataBase.Count; ++i)
         {
@@ -82,7 +83,7 @@ public class CollectionPanel : UIBasePanel {
             {
                 UnitDataBase.SlotData data = new UnitDataBase.SlotData();
                 data.CreateSlotData(DataManager.ListUnitDataBase[i]);
-                UnitData.Add(data);
+                HumanData.Add(data);
             }
         }
 
@@ -93,21 +94,21 @@ public class CollectionPanel : UIBasePanel {
         }
 
         if (HumanPaging == null)
-            HumanPaging = ObjectPaging.CreatePagingPanel(HumanScrollView.gameObject, HumanGrid.gameObject, SLOT, 4, 12, UnitData.Count, 10, HumanPaingCallBack, ObjectPaging.eScrollType.Vertical);
+            HumanPaging = ObjectPaging.CreatePagingPanel(HumanScrollView.gameObject, HumanGrid.gameObject, SLOT, 4, 12, HumanData.Count, 10, HumanPaingCallBack);
         else
-            HumanPaging.NowCreate(UnitData.Count);
+            HumanPaging.NowCreate(HumanData.Count);
 
         HumanScrollView.enabled = true;
         HumanScrollView.ResetPosition();
-        HumanScrollView.enabled = UnitData.Count > 8;
+        HumanScrollView.enabled = HumanData.Count > 8;
     }
 
     void HumanPaingCallBack(int idx, GameObject obj)
     {
         UnitIconSlot content = obj.GetComponent<UnitIconSlot>();
-        if (idx < UnitData.Count)
+        if (HumanData.Count > idx)
         {
-            content.Init(UnitData[idx]);
+            content.Init(HumanData[idx]);
         }
         else
             content.Init(null);
@@ -122,7 +123,7 @@ public class CollectionPanel : UIBasePanel {
     void CreateUndeadList()
     {
         UndeadData.Clear();
-        // 인간만 추가
+        // 언데드만 추가
         for (int i = 0; i < DataManager.ListUnitDataBase.Count; ++i)
         {
             if (DataManager.ListUnitDataBase[i].type == 2)
@@ -140,7 +141,7 @@ public class CollectionPanel : UIBasePanel {
         }
 
         if (UndeadPaging == null)
-            UndeadPaging = ObjectPaging.CreatePagingPanel(UndeadScrollView.gameObject, UndeadGrid.gameObject, SLOT, 4, 12, UndeadData.Count, 10, UndeadPaingCallBack, ObjectPaging.eScrollType.Vertical);
+            UndeadPaging = ObjectPaging.CreatePagingPanel(UndeadScrollView.gameObject, UndeadGrid.gameObject, SLOT, 4, 12, UndeadData.Count, 10, UndeadPaingCallBack);
         else
             UndeadPaging.NowCreate(UndeadData.Count);
 
@@ -152,7 +153,7 @@ public class CollectionPanel : UIBasePanel {
     void UndeadPaingCallBack(int idx, GameObject obj)
     {
         UnitIconSlot content = obj.GetComponent<UnitIconSlot>();
-        if (idx < UndeadData.Count)
+        if (UndeadData.Count > idx)
         {
             content.Init(UndeadData[idx]);
         }
@@ -169,7 +170,7 @@ public class CollectionPanel : UIBasePanel {
     void CreateMonsterList()
     {
         MonsterData.Clear();
-        // 인간만 추가
+        // 몬스터만 추가
         for (int i = 0; i < DataManager.ListUnitDataBase.Count; ++i)
         {
             if (DataManager.ListUnitDataBase[i].type == 3)
@@ -187,7 +188,7 @@ public class CollectionPanel : UIBasePanel {
         }
 
         if (MonsterPaging == null)
-            MonsterPaging = ObjectPaging.CreatePagingPanel(MonsterScrollView.gameObject, MonsterGrid.gameObject, SLOT, 4, 12, MonsterData.Count, 10, MonsterPaingCallBack, ObjectPaging.eScrollType.Vertical);
+            MonsterPaging = ObjectPaging.CreatePagingPanel(MonsterScrollView.gameObject, MonsterGrid.gameObject, SLOT, 4, 12, MonsterData.Count, 10, MonsterPaingCallBack);
         else
             MonsterPaging.NowCreate(MonsterData.Count);
 
@@ -199,7 +200,7 @@ public class CollectionPanel : UIBasePanel {
     void MonsterPaingCallBack(int idx, GameObject obj)
     {
         UnitIconSlot content = obj.GetComponent<UnitIconSlot>();
-        if (idx < MonsterData.Count)
+        if (MonsterData.Count > idx)
         {
             content.Init(MonsterData[idx]);
         }

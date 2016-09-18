@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class UIManager : Singleton<UIManager> {
     static List<UIBasePanel> ListPanel;
 
-    static GameObject UIRoot, SystemRoot;
+    public GameObject UIRoot, SystemRoot;
 
     public static UIBasePanel CurPanel;
 
@@ -29,8 +29,8 @@ public class UIManager : Singleton<UIManager> {
         {
             Panel = Instantiate(Resources.Load("UI/" + _ui)) as GameObject;
             Panel.name = _ui;
-            if (UIRoot != null)
-                Panel.transform.parent = UIRoot.transform;
+            if (UIManager.Instance.UIRoot != null)
+                Panel.transform.parent = UIManager.Instance.UIRoot.transform;
             Panel.transform.localPosition = Vector3.zero;
             Panel.transform.localScale = Vector3.one;
             Panel.GetComponent<UIBasePanel>().Init();
