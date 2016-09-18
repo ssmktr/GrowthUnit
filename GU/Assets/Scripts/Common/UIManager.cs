@@ -97,6 +97,7 @@ public class UIManager : Singleton<UIManager> {
                 if (ListPanel[i].eUIType != UIBasePanel.UIType.Ignore)
                 {
                     PrevIdx = i;
+                    break;
                 }
             }
         }
