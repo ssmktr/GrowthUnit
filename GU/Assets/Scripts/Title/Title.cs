@@ -360,7 +360,7 @@ public class Title : MonoBehaviour {
         }
 
         GameReady = true;
-        StartCoroutine(GameManager._SceneLoading("Main"));
+        GameManager.Instance.GoScene("Main");
     }
     #endregion
     #endregion

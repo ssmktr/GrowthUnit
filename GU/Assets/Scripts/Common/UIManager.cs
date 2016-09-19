@@ -35,8 +35,8 @@ public class UIManager : Singleton<UIManager> {
             Panel.transform.localScale = Vector3.one;
             Panel.GetComponent<UIBasePanel>().Init();
 
-            if (Panel.GetComponent<UIBasePanel>().eUIType != UIBasePanel.UIType.Ignore)
-                ListPanel.Add(Panel.GetComponent<UIBasePanel>());
+            //if (Panel.GetComponent<UIBasePanel>().eUIType != UIBasePanel.UIType.Ignore)
+            ListPanel.Insert(0, Panel.GetComponent<UIBasePanel>());
         }
 
         if (Panel.GetComponent<UIBasePanel>().eUIType == UIBasePanel.UIType.Ignore)
@@ -67,11 +67,8 @@ public class UIManager : Singleton<UIManager> {
 
     public static UIBasePanel GetFirstPanel()
     {
-        for (int i = 0; i < ListPanel.Count; ++i)
-        {
-            if (ListPanel[i].eUIType == UIBasePanel.UIType.Default)
-                return ListPanel[i];
-        }
+        if (ListPanel.Count > 0)
+            return ListPanel[0];
 
         return null;
     }
@@ -123,6 +120,7 @@ public class UIManager : Singleton<UIManager> {
                 ListPanel[CurIdx].LateInit();
                 CurPanel = ListPanel[CurIdx];
                 CurPanel.Prev();
+                OpenEvent();
             }
         }
     }

@@ -20,6 +20,10 @@ public class UIBasePanel : MonoBehaviour {
 
     public virtual void LateInit()
     {
+        GameObject UpInfo = UIManager.GetUI("UpInfoPanel");
+        if (UpInfo != null)
+            UpInfo.GetComponent<UpInfoPanel>().SetBackBtn(IsUpInfoBackBtn());
+
         Open();
     }
 
@@ -43,5 +47,13 @@ public class UIBasePanel : MonoBehaviour {
     public virtual void Prev()
     {
 
+    }
+
+    bool IsUpInfoBackBtn()
+    {
+        if (UIManager.GetFirstPanel() is LobbyPanel)
+            return false;
+
+        return true;
     }
 }

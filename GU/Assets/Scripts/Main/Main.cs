@@ -9,14 +9,13 @@ public class Main : MonoBehaviour {
     IEnumerator Start () {
         if (!Title.GameReady)
         {
-            //GameManager.GoScene("Title");
-            StartCoroutine(GameManager._SceneLoading("Title"));
+            GameManager.Instance.GoScene("Title");
             yield break;
         }
 
         UIManager.Instance.SetManager(UIRoot, SystemRoot);
-        UIManager.OpenUI("LobbyPanel");
         UIManager.OpenUI("UpInfoPanel");
+        UIManager.OpenUI("LobbyPanel");
     }
 }
 

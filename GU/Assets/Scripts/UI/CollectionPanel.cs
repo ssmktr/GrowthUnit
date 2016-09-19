@@ -11,7 +11,7 @@ public class CollectionPanel : UIBasePanel {
     };
     TabType eTabType = TabType.Human;
 
-    public GameObject Center, BackBtn;
+    public GameObject Center;
     public GameObject[] TabGroup, BaseGroup;
 
     GameObject SLOT;
@@ -19,11 +19,6 @@ public class CollectionPanel : UIBasePanel {
     public override void Init()
     {
         base.Init();
-
-        UIEventListener.Get(BackBtn).onClick = (sender) =>
-        {
-            UIManager.Instance.Prev();
-        };
 
         for (int i = 0; i < TabGroup.Length; ++i)
             UIEventListener.Get(TabGroup[i]).onClick = OnClickTab;
@@ -34,6 +29,7 @@ public class CollectionPanel : UIBasePanel {
     public override void LateInit()
     {
         base.LateInit();
+
 
         SetTab();
     }

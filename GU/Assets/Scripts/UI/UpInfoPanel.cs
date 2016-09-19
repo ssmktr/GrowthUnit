@@ -4,12 +4,17 @@ using System.Collections;
 public class UpInfoPanel : UIBasePanel {
 
     public UITexture MainBack;
-    public GameObject EnergyBtn, GoldBtn, DiaBtn, HeartBtn;
+    public GameObject EnergyBtn, GoldBtn, DiaBtn, HeartBtn, BackBtn;
     public UILabel EnergyValueLbl, GoldValueLbl, DiaValueLbl, HeartValueLbl;
 
     public override void Init()
     {
         base.Init();
+
+        UIEventListener.Get(BackBtn).onClick = (sender) =>
+        {
+            UIManager.Instance.Prev();
+        };
 
         UIEventListener.Get(EnergyBtn).onClick = (sender) =>
         {
@@ -36,6 +41,8 @@ public class UpInfoPanel : UIBasePanel {
     {
         base.LateInit();
 
+        BackBtn.SetActive(!(UIManager.GetFirstPanel() is LobbyPanel));
+
         AssetBundleLoad.Instance.AssetTextureLoad("DesertBackGround", (tex) => {
             if (tex != null)
                 MainBack.mainTexture = tex;
@@ -50,5 +57,10 @@ public class UpInfoPanel : UIBasePanel {
         GoldValueLbl.text = GameManager.Instance.Gold.ToString("N0");
         DiaValueLbl.text = GameManager.Instance.Dia.ToString("N0");
         HeartValueLbl.text = GameManager.Instance.Heart.ToString("N0");
+    }
+
+    public void SetBackBtn(bool _bOn)
+    {
+        BackBtn.SetActive(_bOn);
     }
 }

@@ -28,6 +28,11 @@ public class GameManager : Singleton<GameManager>  {
             Debug.Log(value);
     }
 
+    public void GoScene(string SceneName)
+    {
+        StartCoroutine(_SceneLoading(SceneName));
+    }
+
     public static IEnumerator _SceneLoading(string _SceneName)
     {
         SceneLoadingValue = 0f;
