@@ -35,7 +35,6 @@ public class UIManager : Singleton<UIManager> {
             Panel.transform.localScale = Vector3.one;
             Panel.GetComponent<UIBasePanel>().Init();
 
-            //if (Panel.GetComponent<UIBasePanel>().eUIType != UIBasePanel.UIType.Ignore)
             ListPanel.Insert(0, Panel.GetComponent<UIBasePanel>());
         }
 
@@ -75,8 +74,11 @@ public class UIManager : Singleton<UIManager> {
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Prev();
+        if (CurPanel != null)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+                Prev();
+        }
     }
 
     public void Prev()
