@@ -54,6 +54,9 @@ public class UIBasePanel : MonoBehaviour {
         if (UIManager.GetFirstPanel() is LobbyPanel)
             return false;
 
+        if (UIManager.GetFirstPanel().eUIType == UIType.Message || UIManager.GetFirstPanel().eUIType == UIType.Popup || UIManager.GetFirstPanel().eUIType == UIType.Ignore)
+            return false;
+        
         return true;
     }
 }

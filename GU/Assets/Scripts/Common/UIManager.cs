@@ -35,7 +35,6 @@ public class UIManager : Singleton<UIManager> {
             Panel.transform.localScale = Vector3.one;
             Panel.GetComponent<UIBasePanel>().Init();
 
-            //if (Panel.GetComponent<UIBasePanel>().eUIType != UIBasePanel.UIType.Ignore)
             ListPanel.Insert(0, Panel.GetComponent<UIBasePanel>());
         }
 
@@ -57,12 +56,12 @@ public class UIManager : Singleton<UIManager> {
 
     public static GameObject GetUI(string _ui)
     {
-        for (int i = 0; i < ListPanel.Count; ++i)
-        {
-            if (ListPanel[i].gameObject.name == _ui)
-                return ListPanel[i].gameObject;
-        }
-        return null;
+        UIBasePanel Panel = ListPanel.Find(_panel => _panel.name == _ui);
+
+        if (Panel == null)
+            return null;
+
+        return Panel.gameObject;
     }
 
     public static UIBasePanel GetFirstPanel()
@@ -115,8 +114,6 @@ public class UIManager : Singleton<UIManager> {
                 ListPanel.Remove(curPanel);
                 ListPanel.Add(curPanel);
 
-                //ListPanel[PrevIdx].LateInit();
-                //CurPanel = ListPanel[PrevIdx];
                 ListPanel[CurIdx].LateInit();
                 CurPanel = ListPanel[CurIdx];
                 CurPanel.Prev();
@@ -127,16 +124,11 @@ public class UIManager : Singleton<UIManager> {
 
     static void OpenEvent()
     {
-        for (int i = 0; i < ListPanel.Count; ++i)
+        UIBasePanel Panel = ListPanel.Find(_panel => _panel == CurPanel);
+        if (Panel != null)
         {
-            if (CurPanel.name == ListPanel[i].name)
-            {
-                UIBasePanel panel = ListPanel[i];
-                ListPanel.RemoveAt(i);
-                ListPanel.Insert(0, panel);
-                CurPanel = panel;
-                break;
-            }
+            ListPanel.Remove(Panel);
+            ListPanel.Insert(0, Panel);
         }
     }
 
