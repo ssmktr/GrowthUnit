@@ -16,8 +16,6 @@ public class InvenPanel : UIBasePanel {
 
         UIEventListener.Get(BackBtn).onClick = (sender) =>
         {
-            //    Hide();
-            //    UIManager.OpenUI("LobbyPanel");
             UIManager.Instance.Prev();
         };
     }
@@ -51,6 +49,7 @@ public class InvenPanel : UIBasePanel {
                 go.transform.localPosition = Vector3.zero;
                 go.transform.localScale = new Vector3(-100, 100, 100) * _UnitData.cardsize;
                 UIManager.SetLayer(go.transform, 8);
+
                 Renderer[] render = go.GetComponentsInChildren<Renderer>();
                 for (int i = 0; i < render.Length; ++i)
                     render[i].sortingOrder += 1;

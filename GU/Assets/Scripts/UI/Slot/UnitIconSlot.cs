@@ -4,13 +4,14 @@ using System.Collections;
 public class UnitIconSlot : MonoBehaviour {
 
     public GameObject Center, GradeGroup;
-    public UISprite Icon;
+    public UISprite Icon, SelectSprite;
     public UILabel NameLbl, LvLbl;
 
-    UnitDataBase.SlotData SlotData = null;
+    public UnitDataBase.SlotData SlotData = null;
 
     public void Init(UnitDataBase.SlotData _data)
     {
+        SetSelect(false);
         if (_data == null)
         {
             Center.SetActive(false);
@@ -39,5 +40,10 @@ public class UnitIconSlot : MonoBehaviour {
         for (int i = 0; i < 6; ++i)
             GradeGroup.transform.FindChild("star" + i).gameObject.SetActive(SlotData.grade > i);
     }
-	
+
+    public void SetSelect(bool _bSelect)
+    {
+        if (SelectSprite != null)
+            SelectSprite.gameObject.SetActive(_bSelect);
+    }	
 }

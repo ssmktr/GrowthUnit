@@ -11,10 +11,12 @@ public class CollectionPanel : UIBasePanel {
     };
     TabType eTabType = TabType.Human;
 
-    public GameObject Center;
-    public GameObject[] TabGroup, BaseGroup;
+    public GameObject Center, CardInfo, ModelRoot;
+    public GameObject[] TabGroup;
 
-    GameObject SLOT;
+    UnitIconSlot SelectUnit;
+    int SelectId = 0;
+    GameObject SLOT, ModelObj;
 
     public override void Init()
     {
@@ -30,14 +32,17 @@ public class CollectionPanel : UIBasePanel {
     {
         base.LateInit();
 
-
         SetTab();
     }
 
     void OnClickTab(GameObject sender)
     {
-        eTabType = (TabType)System.Enum.Parse(typeof(TabType), sender.name);
-        SetTab();
+        TabType TabType = (TabType)System.Enum.Parse(typeof(TabType), sender.name);
+        if (TabType != eTabType)
+        {
+            eTabType = TabType;
+            SetTab();
+        }
     }
 
     void SetTab()
@@ -47,161 +52,117 @@ public class CollectionPanel : UIBasePanel {
             if ((int)eTabType == i)
             {
                 TabGroup[i].transform.FindChild("BackGround").gameObject.SetActive(true);
-                BaseGroup[i].SetActive(true);
+                SelectUnit = null;
+                SelectId = 0;
 
-                if (eTabType == TabType.Human)
-                    CreateHumanList();
-                else if (eTabType == TabType.Undead)
-                    CreateUndeadList();
-                else if (eTabType == TabType.Monster)
-                    CreateMonsterList();
+                CreateList();
             }
             else
             {
                 TabGroup[i].transform.FindChild("BackGround").gameObject.SetActive(false);
-                BaseGroup[i].SetActive(false);
             }
         }
     }
 
-    #region HUMAN
-    ObjectPaging HumanPaging;
-    public UIScrollView HumanScrollView;
-    public UIGrid HumanGrid;
-    List<UnitDataBase.SlotData> HumanData = new List<UnitDataBase.SlotData>();
-    void CreateHumanList()
+    ObjectPaging Paging;
+    public UIScrollView ScrollView;
+    public UIGrid Grid;
+    List<UnitDataBase.SlotData> UnitData = new List<UnitDataBase.SlotData>();
+    void CreateList()
     {
-        HumanData.Clear();
+        UnitData.Clear();
         // 인간만 추가
         for (int i = 0; i < DataManager.ListUnitDataBase.Count; ++i)
         {
-            if (DataManager.ListUnitDataBase[i].type == 1)
+            if (DataManager.ListUnitDataBase[i].type == ((int)eTabType + 1))
             {
                 UnitDataBase.SlotData data = new UnitDataBase.SlotData();
                 data.CreateSlotData(DataManager.ListUnitDataBase[i]);
-                HumanData.Add(data);
+                UnitData.Add(data);
             }
         }
 
-        if (HumanScrollView.transform.localPosition != Vector3.zero)
+        if (ScrollView.transform.localPosition != Vector3.zero)
         {
-            HumanScrollView.transform.localPosition = Vector3.zero;
-            HumanScrollView.GetComponent<UIPanel>().clipOffset = Vector2.zero;
+            ScrollView.transform.localPosition = Vector3.zero;
+            ScrollView.GetComponent<UIPanel>().clipOffset = Vector2.zero;
         }
 
-        if (HumanPaging == null)
-            HumanPaging = ObjectPaging.CreatePagingPanel(HumanScrollView.gameObject, HumanGrid.gameObject, SLOT, 4, 12, HumanData.Count, 10, HumanPaingCallBack);
+        if (Paging == null)
+            Paging = ObjectPaging.CreatePagingPanel(ScrollView.gameObject, Grid.gameObject, SLOT, 4, 12, UnitData.Count, 10, HumanPaingCallBack);
         else
-            HumanPaging.NowCreate(HumanData.Count);
+            Paging.NowCreate(UnitData.Count);
 
-        HumanScrollView.enabled = true;
-        HumanScrollView.ResetPosition();
-        HumanScrollView.enabled = HumanData.Count > 8;
+        ScrollView.enabled = true;
+        ScrollView.ResetPosition();
+        ScrollView.enabled = UnitData.Count > 8;
     }
 
     void HumanPaingCallBack(int idx, GameObject obj)
     {
         UnitIconSlot content = obj.GetComponent<UnitIconSlot>();
-        if (HumanData.Count > idx)
+        if (UnitData.Count > idx)
         {
-            content.Init(HumanData[idx]);
+            content.Init(UnitData[idx]);
+            UIEventListener.Get(obj).onClick = OnClickSlot;
+
+            if (SelectId == 0)
+            {
+                SelectId = content.SlotData.id;
+                SelectUnit = content;
+                CreateModel();
+            }
+            content.SetSelect(SelectId == content.SlotData.id);
         }
         else
             content.Init(null);
     }
-    #endregion
 
-    #region UNDEAD
-    ObjectPaging UndeadPaging;
-    public UIScrollView UndeadScrollView;
-    public UIGrid UndeadGrid;
-    List<UnitDataBase.SlotData> UndeadData = new List<UnitDataBase.SlotData>();
-    void CreateUndeadList()
+    void OnClickSlot(GameObject sender)
     {
-        UndeadData.Clear();
-        // 언데드만 추가
-        for (int i = 0; i < DataManager.ListUnitDataBase.Count; ++i)
+        if (sender == null)
+            return;
+
+        UnitIconSlot content = sender.GetComponent<UnitIconSlot>();
+        if (content != null)
         {
-            if (DataManager.ListUnitDataBase[i].type == 2)
+            if (SelectUnit != null)
+                SelectUnit.SetSelect(false);
+
+            SelectId = content.SlotData.id;
+            SelectUnit = content;
+            SelectUnit.SetSelect(true);
+
+            CreateModel();
+        }
+    }
+
+    void CreateModel()
+    {
+        if (ModelObj != null)
+        {
+            Destroy(ModelObj);
+            ModelObj = null;
+        }
+
+        if (ModelObj == null)
+        {
+            UnitDataBase.Data UnitData = DataManager.GetUnitData(SelectId);
+            if (UnitData != null)
             {
-                UnitDataBase.SlotData data = new UnitDataBase.SlotData();
-                data.CreateSlotData(DataManager.ListUnitDataBase[i]);
-                UndeadData.Add(data);
+                AssetBundleLoad.Instance.AssetUnitLoad(UnitData.name, (obj) => {
+                    obj.transform.localPosition = Vector3.zero;
+                    obj.transform.localScale = Vector3.one * 100 * UnitData.cardsize;
+                    UIManager.SetLayer(obj.transform, 8);
+
+                    Renderer[] render = obj.GetComponentsInChildren<Renderer>();
+                    for (int i = 0; i < render.Length; ++i)
+                        render[i].sortingOrder += 1;
+
+                    ModelObj = obj;
+
+                }, ModelRoot);
             }
         }
-
-        if (UndeadScrollView.transform.localPosition != Vector3.zero)
-        {
-            UndeadScrollView.transform.localPosition = Vector3.zero;
-            UndeadScrollView.GetComponent<UIPanel>().clipOffset = Vector2.zero;
-        }
-
-        if (UndeadPaging == null)
-            UndeadPaging = ObjectPaging.CreatePagingPanel(UndeadScrollView.gameObject, UndeadGrid.gameObject, SLOT, 4, 12, UndeadData.Count, 10, UndeadPaingCallBack);
-        else
-            UndeadPaging.NowCreate(UndeadData.Count);
-
-        UndeadScrollView.enabled = true;
-        UndeadScrollView.ResetPosition();
-        UndeadScrollView.enabled = UndeadData.Count > 8;
     }
-
-    void UndeadPaingCallBack(int idx, GameObject obj)
-    {
-        UnitIconSlot content = obj.GetComponent<UnitIconSlot>();
-        if (UndeadData.Count > idx)
-        {
-            content.Init(UndeadData[idx]);
-        }
-        else
-            content.Init(null);
-    }
-    #endregion
-
-    #region Monster
-    ObjectPaging MonsterPaging;
-    public UIScrollView MonsterScrollView;
-    public UIGrid MonsterGrid;
-    List<UnitDataBase.SlotData> MonsterData = new List<UnitDataBase.SlotData>();
-    void CreateMonsterList()
-    {
-        MonsterData.Clear();
-        // 몬스터만 추가
-        for (int i = 0; i < DataManager.ListUnitDataBase.Count; ++i)
-        {
-            if (DataManager.ListUnitDataBase[i].type == 3)
-            {
-                UnitDataBase.SlotData data = new UnitDataBase.SlotData();
-                data.CreateSlotData(DataManager.ListUnitDataBase[i]);
-                MonsterData.Add(data);
-            }
-        }
-
-        if (MonsterScrollView.transform.localPosition != Vector3.zero)
-        {
-            MonsterScrollView.transform.localPosition = Vector3.zero;
-            MonsterScrollView.GetComponent<UIPanel>().clipOffset = Vector2.zero;
-        }
-
-        if (MonsterPaging == null)
-            MonsterPaging = ObjectPaging.CreatePagingPanel(MonsterScrollView.gameObject, MonsterGrid.gameObject, SLOT, 4, 12, MonsterData.Count, 10, MonsterPaingCallBack);
-        else
-            MonsterPaging.NowCreate(MonsterData.Count);
-
-        MonsterScrollView.enabled = true;
-        MonsterScrollView.ResetPosition();
-        MonsterScrollView.enabled = MonsterData.Count > 8;
-    }
-
-    void MonsterPaingCallBack(int idx, GameObject obj)
-    {
-        UnitIconSlot content = obj.GetComponent<UnitIconSlot>();
-        if (MonsterData.Count > idx)
-        {
-            content.Init(MonsterData[idx]);
-        }
-        else
-            content.Init(null);
-    }
-    #endregion
 }
