@@ -47,8 +47,8 @@ public class UIManager : Singleton<UIManager> {
         {
             CurPanel = Panel.GetComponent<UIBasePanel>();
             CurPanel.parameters = _parameters;
-            CurPanel.LateInit();
             OpenEvent();
+            CurPanel.LateInit();
         }
 
         return Panel;
@@ -87,7 +87,7 @@ public class UIManager : Singleton<UIManager> {
         int PrevIdx = -1;
         for (int i = 0; i < ListPanel.Count; ++i)
         {
-            if (CurIdx == -1 && CurPanel.name == ListPanel[i].name)
+            if (ListPanel[i].eUIType != UIBasePanel.UIType.Ignore && CurIdx == -1 && CurPanel.name == ListPanel[i].name)
             {
                 CurIdx = i;
             }
