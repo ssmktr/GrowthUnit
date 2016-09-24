@@ -74,8 +74,11 @@ public class UIManager : Singleton<UIManager> {
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Prev();
+        if (CurPanel != null)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+                Prev();
+        }
     }
 
     public void Prev()
