@@ -359,7 +359,7 @@ public class Title : MonoBehaviour {
     void SetNameTableData(string _Content)
     {
         string Content = _Content.Trim();
-        DataManager.ListNameDataBase.Clear();
+        DataManager.DIcNameDataBase.Clear();
         List<object> ListData = Json.Deserialize(Content) as List<object>;
         for (int i = 0; i < ListData.Count; ++i)
         {
@@ -374,7 +374,7 @@ public class Title : MonoBehaviour {
                 if (DicData.ContainsKey("kor"))
                     data.kor = JsonUtil.GetStringValue(DicData, "kor");
 
-                DataManager.ListNameDataBase.Add(data);
+                DataManager.DIcNameDataBase.Add(data.id, data);
             }
         }
     }

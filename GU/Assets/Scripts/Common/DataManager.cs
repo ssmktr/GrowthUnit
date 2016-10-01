@@ -6,7 +6,7 @@ public class DataManager : Singleton<DataManager> {
     public static Dictionary<string, int> DicConfig = new Dictionary<string, int>();
     public static List<UnitDataBase.Data> ListUnitDataBase = new List<UnitDataBase.Data>();
     public static List<StageDataBase.Data> ListStageDataBase = new List<StageDataBase.Data>();
-    public static List<NameDataBase.Data> ListNameDataBase = new List<NameDataBase.Data>();
+    public static Dictionary<int, NameDataBase.Data> DIcNameDataBase = new Dictionary<int, NameDataBase.Data>();
 
     
     public static int GetConfigData(string _key)
@@ -48,11 +48,8 @@ public class DataManager : Singleton<DataManager> {
     #region NAMEDATA
     public static NameDataBase.Data GetNameData(int _id)
     {
-        for (int i = 0; i < ListNameDataBase.Count; ++i)
-        {
-            if (_id == ListNameDataBase[i].id)
-                return ListNameDataBase[i];
-        }
+        if (DIcNameDataBase.ContainsKey(_id))
+            return DIcNameDataBase[_id];
 
         Debug.LogWarning("Not Found NameData");
         return null;
@@ -60,9 +57,8 @@ public class DataManager : Singleton<DataManager> {
 
     public static string GetName(int _id)
     {
-        NameDataBase.Data NameData = GetNameData(_id);
-        if (NameData != null)
-            return NameData.kor;
+        if (DIcNameDataBase.ContainsKey(_id))
+            return DIcNameDataBase[_id].kor;
 
         Debug.LogWarning("Not Found Name String");
         return null;
