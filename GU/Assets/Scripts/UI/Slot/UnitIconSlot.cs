@@ -28,9 +28,15 @@ public class UnitIconSlot : MonoBehaviour {
     {
         if (SlotData != null)
         {
-            Icon.spriteName = "icon_" + SlotData.name;
+            UnitDataBase.Data Unit = DataManager.GetUnitData(SlotData.id);
+            if (Unit != null)
+            {
+                string name = DataManager.GetName(Unit.stringid);
+                NameLbl.text = name;
+                Icon.spriteName = "icon_" + name;
+            }
+
             LvLbl.text = SlotData.lv.ToString();
-            NameLbl.text = SlotData.name;
             SetGrade();
         }
     }

@@ -19,6 +19,16 @@ public class GameManager : Singleton<GameManager>  {
         }
     }
 
+    public static Dictionary<int, NetData.UnitData> HaveUnitData = new Dictionary<int, NetData.UnitData>();
+    public static NetData.UnitData GetMyUnit(int _Gsn)
+    {
+        if (HaveUnitData.ContainsKey(_Gsn))
+            return HaveUnitData[_Gsn];
+
+        Debug.LogWarning("Not Have Unit GSN");
+        return null;
+    }
+
     public static AsyncOperation SceneSync = null;
     public static float SceneLoadingValue = 0f;
 

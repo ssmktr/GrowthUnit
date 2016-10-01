@@ -13,6 +13,9 @@ public class Main : MonoBehaviour {
             yield break;
         }
 
+        int idx = Random.Range(0, DataManager.ListUnitDataBase.Count);
+        yield return StartCoroutine(SqliteManager.RequestGetUnit(DataManager.ListUnitDataBase[idx].id));
+
         UIManager.Instance.SetManager(UIRoot, SystemRoot);
         UIManager.OpenUI("UpInfoPanel");
         UIManager.OpenUI("LobbyPanel");

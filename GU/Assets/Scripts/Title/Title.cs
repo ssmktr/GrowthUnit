@@ -89,7 +89,15 @@ public class Title : MonoBehaviour {
         // Json 데이터
         yield return StartCoroutine(_LoadUnitTableData());
         yield return StartCoroutine(_LoadStageTableData());
+        yield return StartCoroutine(_LoadNameTableData());
         yield return StartCoroutine(_LoadConfigTableData());
+
+        // Sqlite 데이터
+        yield return StartCoroutine(SqliteManager.RequestLoadMyUnit());
+
+        // 게임 준비 끝 메인 씬으로 이동
+        GameReady = true;
+        GameManager.Instance.GoScene("Main");
     }
 
     #region DATA
@@ -194,6 +202,9 @@ public class Title : MonoBehaviour {
                 if (DicData.ContainsKey("name"))
                     data.name = JsonUtil.GetStringValue(DicData, "name");
 
+                if (DicData.ContainsKey("stringid"))
+                    data.stringid = JsonUtil.GetIntValue(DicData, "stringid");
+
                 if (DicData.ContainsKey("type"))
                     data.type = JsonUtil.GetIntValue(DicData, "type");
 
@@ -220,6 +231,9 @@ public class Title : MonoBehaviour {
 
                 if (DicData.ContainsKey("cardsize"))
                     data.cardsize = JsonUtil.GetFloatValue(DicData, "cardsize");
+
+                if (DicData.ContainsKey("battlesize"))
+                    data.battlesize = JsonUtil.GetFloatValue(DicData, "battlesize");
 
                 DataManager.ListUnitDataBase.Add(data);
             }
@@ -315,6 +329,56 @@ public class Title : MonoBehaviour {
         }
     }
     #endregion
+    #region NAMEDATA
+    IEnumerator _LoadNameTableData()
+    {
+        WWW www = new WWW(GameInfo.AssetBundleUrl + "TableData/NameData.json");
+        while (!www.isDone)
+        {
+            if (www.progress > 0)
+            {
+                UiProgressBar.gameObject.SetActive(true);
+                UiProgressBar.value = www.progress;
+                UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+            }
+            yield return null;
+        }
+
+        yield return www;
+
+        if (www.error == null)
+        {
+            UiProgressBar.gameObject.SetActive(false);
+            GameManager.ViewDebug("NameData : " + www.text);
+            SetNameTableData(www.text);
+        }
+        else
+            GameManager.ViewDebug(www.error);
+    }
+
+    void SetNameTableData(string _Content)
+    {
+        string Content = _Content.Trim();
+        DataManager.ListNameDataBase.Clear();
+        List<object> ListData = Json.Deserialize(Content) as List<object>;
+        for (int i = 0; i < ListData.Count; ++i)
+        {
+            Dictionary<string, object> DicData = ListData[i] as Dictionary<string, object>;
+            if (DicData != null)
+            {
+                NameDataBase.Data data = new NameDataBase.Data();
+
+                if (DicData.ContainsKey("id"))
+                    data.id = JsonUtil.GetIntValue(DicData, "id");
+
+                if (DicData.ContainsKey("kor"))
+                    data.kor = JsonUtil.GetStringValue(DicData, "kor");
+
+                DataManager.ListNameDataBase.Add(data);
+            }
+        }
+    }
+    #endregion
     #region CONFIGSJONDATA
     IEnumerator _LoadConfigTableData()
     {
@@ -358,12 +422,7 @@ public class Title : MonoBehaviour {
             if (DicData.ContainsKey("CreateHeart"))
                 DataManager.DicConfig.Add("CreateHeart", JsonUtil.GetIntValue(DicData, "CreateHeart"));
         }
-
-        GameReady = true;
-        GameManager.Instance.GoScene("Main");
     }
     #endregion
     #endregion
-
-    
 }

@@ -105,7 +105,7 @@ public class CollectionPanel : UIBasePanel {
         {
             content.Init(UnitData[idx]);
             UIEventListener.Get(obj).onClick = OnClickSlot;
-
+                
             if (SelectId == 0)
             {
                 SelectId = content.SlotData.id;
@@ -117,7 +117,7 @@ public class CollectionPanel : UIBasePanel {
         else
             content.Init(null);
     }
-
+    
     void OnClickSlot(GameObject sender)
     {
         if (sender == null)
@@ -150,7 +150,8 @@ public class CollectionPanel : UIBasePanel {
             UnitDataBase.Data UnitData = DataManager.GetUnitData(SelectId);
             if (UnitData != null)
             {
-                AssetBundleLoad.Instance.AssetUnitLoad(UnitData.name, (obj) => {
+                string UnitName = DataManager.GetName(UnitData.stringid);
+                AssetBundleLoad.Instance.AssetUnitLoad(UnitName, (obj) => {
                     obj.transform.localPosition = Vector3.zero;
                     obj.transform.localScale = Vector3.one * 100 * UnitData.cardsize;
                     UIManager.SetLayer(obj.transform, 8);

@@ -7,6 +7,7 @@ public class UnitDataBase {
     {
         public int id = 0;
         public string name = "";
+        public int stringid = 0;
         public int type = 0;
         public int classtype = 0;
         public float move_speed = 0f;
@@ -14,8 +15,9 @@ public class UnitDataBase {
         public int atk = 0;
         public int def = 0;
         public float cri = 0f;
-        public float cardsize = 0f;
         public float attackrange = 0f;
+        public float cardsize = 0f;
+        public float battlesize = 0f;
     };
 
     public class SlotData
@@ -74,5 +76,14 @@ public class StageDataBase
         public int enemycount = 0;
         public List<int> ListBossId = new List<int>();
         public int bosscount = 0;
+    };
+};
+
+public class NameDataBase
+{
+    public class Data
+    {
+        public int id;
+        public string kor;
     };
 };
