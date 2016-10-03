@@ -94,6 +94,13 @@ public class Title : MonoBehaviour {
 
         // Sqlite 데이터
         yield return StartCoroutine(SqliteManager.RequestLoadMyUnit());
+        if (GameManager.HaveUnitData.Count <= 0)
+        {
+            // 유닛이 없으면 101, 201, 301 중에 랜덤하게 1마리 생성
+            int idx = Random.Range(1, 4) * 100 + 1;
+            yield return StartCoroutine(SqliteManager.RequestGetUnit(idx));
+            yield return StartCoroutine(SqliteManager.RequestLoadMyUnit());
+        }
 
         // 게임 준비 끝 메인 씬으로 이동
         GameReady = true;

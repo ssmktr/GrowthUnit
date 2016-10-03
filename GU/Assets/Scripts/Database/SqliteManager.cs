@@ -7,11 +7,6 @@ using System.Data;
 
 public class SqliteManager : MonoBehaviour {
 
-    public static void LoadSqliteData<T>(string _URL, System.Action<IDataReader> _ResponseCallBack)
-    {
-        
-    }
-
     public static IEnumerator RequestGetUnit(int _id)
     {
         yield return null;
@@ -33,35 +28,7 @@ public class SqliteManager : MonoBehaviour {
 
                     dbCmd.CommandText = Query;
                     dbCmd.ExecuteReader();
-
-                    Query = "SELECT * FROM UnitData";
-                    dbCmd.CommandText = Query;
-
-                    using (IDataReader reader = dbCmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            if (!GameManager.HaveUnitData.ContainsKey(reader.GetInt32(0)))
-                            {
-                                NetData.UnitData data = new NetData.UnitData();
-                                data.uid = reader.GetInt32(0);
-                                data.id = reader.GetInt32(1);
-                                data.level = reader.GetInt32(2);
-                                data.stringid = reader.GetInt32(3);
-                                data.type = reader.GetInt32(4);
-                                data.classtype = reader.GetInt32(5);
-                                data.move_speed = reader.GetFloat(6);
-                                data.hp = reader.GetFloat(7);
-                                data.atk = reader.GetInt32(8);
-                                data.cri = reader.GetFloat(9);
-                                data.attackrange = reader.GetFloat(10);
-                                GameManager.HaveUnitData.Add(reader.GetInt32(0), data);
-                            }
-                        }
-
-                        reader.Close();
-                        dbConnection.Close();
-                    }
+                    dbConnection.Close();
                 }
             }
         }
@@ -83,21 +50,25 @@ public class SqliteManager : MonoBehaviour {
 
                 using (IDataReader reader = Cmd.ExecuteReader())
                 {
+                    GameManager.HaveUnitData.Clear();
                     while (reader.Read())
                     {
-                        NetData.UnitData data = new NetData.UnitData();
-                        data.uid = reader.GetInt32(0);
-                        data.id = reader.GetInt32(1);
-                        data.level = reader.GetInt32(2);
-                        data.stringid = reader.GetInt32(3);
-                        data.type = reader.GetInt32(4);
-                        data.classtype = reader.GetInt32(5);
-                        data.move_speed = reader.GetFloat(6);
-                        data.hp = reader.GetFloat(7);
-                        data.atk = reader.GetInt32(8);
-                        data.cri = reader.GetFloat(9);
-                        data.attackrange = reader.GetFloat(10);
-                        GameManager.HaveUnitData.Add(reader.GetInt32(0), data);
+                        if (!GameManager.HaveUnitData.ContainsKey(reader.GetInt32(0)))
+                        {
+                            NetData.UnitData data = new NetData.UnitData();
+                            data.uid = reader.GetInt32(0);
+                            data.id = reader.GetInt32(1);
+                            data.level = reader.GetInt32(2);
+                            data.stringid = reader.GetInt32(3);
+                            data.type = reader.GetInt32(4);
+                            data.classtype = reader.GetInt32(5);
+                            data.move_speed = reader.GetFloat(6);
+                            data.hp = reader.GetFloat(7);
+                            data.atk = reader.GetInt32(8);
+                            data.cri = reader.GetFloat(9);
+                            data.attackrange = reader.GetFloat(10);
+                            GameManager.HaveUnitData.Add(reader.GetInt32(0), data);
+                        }
                     }
 
                     reader.Close();
