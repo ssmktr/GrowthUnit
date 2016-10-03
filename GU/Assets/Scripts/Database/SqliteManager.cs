@@ -5,15 +5,21 @@ using Mono.Data.SqliteClient;
 using System.IO;
 using System.Data;
 
-public class SqliteManager : MonoBehaviour {
+public class SqliteManager : Singleton<SqliteManager> {
 
-    public static IEnumerator RequestGetUnit(int _id)
+    string UnitDataConnection = "";
+
+    public SqliteManager()
+    {
+        UnitDataConnection = "URI=file:" + Application.streamingAssetsPath + "/GrowthUnit.sqlite";
+    }
+
+    #region UNITDATA
+    public IEnumerator RequestGetUnit(int _id)
     {
         yield return null;
 
-        string ConnectionString = "URI=file:" + Application.streamingAssetsPath + "/GrowthUnit.sqlite";
-
-        using (IDbConnection dbConnection = new SqliteConnection(ConnectionString))
+        using (IDbConnection dbConnection = new SqliteConnection(UnitDataConnection))
         {
             dbConnection.Open();
 
@@ -34,13 +40,11 @@ public class SqliteManager : MonoBehaviour {
         }
     }
 
-    public static IEnumerator RequestLoadMyUnit()
+    public IEnumerator RequestLoadMyUnit()
     {
         yield return null;
 
-        string ConnectionString = "URI=file:" + Application.streamingAssetsPath + "/GrowthUnit.sqlite";
-
-        using (IDbConnection Connection = new SqliteConnection(ConnectionString))
+        using (IDbConnection Connection = new SqliteConnection(UnitDataConnection))
         {
             Connection.Open();
             using (IDbCommand Cmd = Connection.CreateCommand())
@@ -77,4 +81,9 @@ public class SqliteManager : MonoBehaviour {
             }
         }
     }
+    #endregion
+
+    #region USERDATA
+
+    #endregion
 }
