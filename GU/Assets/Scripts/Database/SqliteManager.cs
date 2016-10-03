@@ -101,11 +101,11 @@ public class SqliteManager : Singleton<SqliteManager> {
                     while (reader.Read())
                     {
                         GameManager.Instance.Level = reader.GetInt32(0);
-                        GameManager.Instance.Gold = reader.GetInt32(1);
-                        GameManager.Instance.Dia = reader.GetInt32(2);
-                        GameManager.Instance.Energy = reader.GetInt32(3);
-                        GameManager.Instance.Heart = reader.GetInt32(4);
-                        GameManager.Instance.Exp = reader.GetInt32(5);
+                        GameManager.Instance.Exp = reader.GetInt32(1);
+                        GameManager.Instance.Energy = reader.GetInt32(2);
+                        GameManager.Instance.Gold = reader.GetInt32(3);
+                        GameManager.Instance.Dia = reader.GetInt32(4);
+                        GameManager.Instance.Heart = reader.GetInt32(5);
                     }
 
                     reader.Close();
