@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>  {
 
+    public int Level = 0;
+    public int Exp = 0;
     public int Energy = 1000000;
     public int Gold = 0;
     public int Dia = 0;

@@ -93,6 +93,7 @@ public class Title : MonoBehaviour {
         yield return StartCoroutine(_LoadConfigTableData());
 
         // Sqlite 데이터
+        yield return StartCoroutine(SqliteManager.Instance.RequestLoadUserData());
         yield return StartCoroutine(SqliteManager.Instance.RequestLoadMyUnit());
         if (GameManager.HaveUnitData.Count <= 0)
         {

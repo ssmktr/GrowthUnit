@@ -7,11 +7,11 @@ using System.Data;
 
 public class SqliteManager : Singleton<SqliteManager> {
 
-    string UnitDataConnection = "";
+    string SqliteConnection = "";
 
     public SqliteManager()
     {
-        UnitDataConnection = "URI=file:" + Application.streamingAssetsPath + "/GrowthUnit.sqlite";
+        SqliteConnection = "URI=file:" + Application.streamingAssetsPath + "/GrowthUnit.sqlite";
     }
 
     #region UNITDATA
@@ -19,7 +19,7 @@ public class SqliteManager : Singleton<SqliteManager> {
     {
         yield return null;
 
-        using (IDbConnection dbConnection = new SqliteConnection(UnitDataConnection))
+        using (IDbConnection dbConnection = new SqliteConnection(SqliteConnection))
         {
             dbConnection.Open();
 
@@ -44,7 +44,7 @@ public class SqliteManager : Singleton<SqliteManager> {
     {
         yield return null;
 
-        using (IDbConnection Connection = new SqliteConnection(UnitDataConnection))
+        using (IDbConnection Connection = new SqliteConnection(SqliteConnection))
         {
             Connection.Open();
             using (IDbCommand Cmd = Connection.CreateCommand())
@@ -84,6 +84,35 @@ public class SqliteManager : Singleton<SqliteManager> {
     #endregion
 
     #region USERDATA
+    public IEnumerator RequestLoadUserData()
+    {
+        yield return null;
 
+        using (IDbConnection Connection = new SqliteConnection(SqliteConnection))
+        {
+            Connection.Open();
+            using (IDbCommand Cmd = Connection.CreateCommand())
+            {
+                string Query = "SELECT * FROM UserData";
+                Cmd.CommandText = Query;
+
+                using (IDataReader reader = Cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        GameManager.Instance.Level = reader.GetInt32(0);
+                        GameManager.Instance.Gold = reader.GetInt32(1);
+                        GameManager.Instance.Dia = reader.GetInt32(2);
+                        GameManager.Instance.Energy = reader.GetInt32(3);
+                        GameManager.Instance.Heart = reader.GetInt32(4);
+                        GameManager.Instance.Exp = reader.GetInt32(5);
+                    }
+
+                    reader.Close();
+                    Connection.Close();
+                }
+            }
+        }
+    }
     #endregion
 }
