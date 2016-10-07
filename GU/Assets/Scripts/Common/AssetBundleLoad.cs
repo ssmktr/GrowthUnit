@@ -10,7 +10,8 @@ public class AssetBundleLoad : Singleton<AssetBundleLoad> {
     // 유닛 에셋번들 로드
     public void AssetUnitLoad(string _UnitName, System.Action<GameObject> _call = null, GameObject _parent = null, float _size = 100)
     {
-        StartCoroutine(_AssetUnitLoad(_UnitName, _call, _parent, _size));
+        if (!string.IsNullOrEmpty(_UnitName))
+            StartCoroutine(_AssetUnitLoad(_UnitName, _call, _parent, _size));
     }
 
     IEnumerator _AssetUnitLoad(string _UnitName, System.Action<GameObject> _call = null, GameObject _parent = null, float _size = 100)

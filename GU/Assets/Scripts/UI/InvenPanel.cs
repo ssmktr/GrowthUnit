@@ -45,7 +45,7 @@ public class InvenPanel : UIBasePanel {
 
         if (ModelObj == null)
         {
-            AssetBundleLoad.Instance.AssetUnitLoad(_UnitData.name, (go) => {
+            AssetBundleLoad.Instance.AssetUnitLoad(DataManager.GetName(_UnitData.stringid), (go) => {
                 go.transform.localPosition = Vector3.zero;
                 go.transform.localScale = new Vector3(-100, 100, 100) * _UnitData.cardsize;
                 UIManager.SetLayer(go.transform, 8);
