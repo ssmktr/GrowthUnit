@@ -196,7 +196,7 @@ public class Title : MonoBehaviour {
     void SetUnitTableData(string _Content)
     {
         string Content = _Content.Trim();
-        DataManager.ListUnitDataBase.Clear();
+        DataManager.DicUnitDataBase.Clear();
         List<object> ListData = Json.Deserialize(Content) as List<object>;
         for (int i = 0; i < ListData.Count; ++i)
         {
@@ -244,7 +244,7 @@ public class Title : MonoBehaviour {
                 if (DicData.ContainsKey("battlesize"))
                     data.battlesize = JsonUtil.GetFloatValue(DicData, "battlesize");
 
-                DataManager.ListUnitDataBase.Add(data);
+                DataManager.DicUnitDataBase.Add(data.id, data);
             }
         }
     }
@@ -279,7 +279,7 @@ public class Title : MonoBehaviour {
     void SetStageTableData(string _Content)
     {
         string Content = _Content.Trim();
-        DataManager.ListStageDataBase.Clear();
+        DataManager.DicStageDataBase.Clear();
         List<object> ListData = Json.Deserialize(Content) as List<object>;
         if (ListData != null)
         {
@@ -332,7 +332,7 @@ public class Title : MonoBehaviour {
                     if (DicData.ContainsKey("bosscount"))
                         data.bosscount = JsonUtil.GetIntValue(DicData, "bosscount");
 
-                    DataManager.ListStageDataBase.Add(data);
+                    DataManager.DicStageDataBase.Add(data.id, data);
                 }
             }
         }

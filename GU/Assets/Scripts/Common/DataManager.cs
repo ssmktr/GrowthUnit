@@ -5,12 +5,12 @@ using System.Collections.Generic;
 public class DataManager : Singleton<DataManager> {
     public static Dictionary<string, int> DicConfig = new Dictionary<string, int>();
 
-    public static List<UnitDataBase.Data> ListUnitDataBase = new List<UnitDataBase.Data>();
+    public static Dictionary<int, UnitDataBase.Data> DicUnitDataBase = new Dictionary<int, UnitDataBase.Data>();
     public static Dictionary<int, UnitDataBase.ResourceData> DicUnitResourceData = new Dictionary<int, UnitDataBase.ResourceData>();
 
     public static Dictionary<int, NameDataBase.Data> DicNameDataBase = new Dictionary<int, NameDataBase.Data>();
 
-    public static List<StageDataBase.Data> ListStageDataBase = new List<StageDataBase.Data>();
+    public static Dictionary<int, StageDataBase.Data> DicStageDataBase = new Dictionary<int, StageDataBase.Data>();
     
     public static int GetConfigData(string _key)
     {
@@ -24,15 +24,8 @@ public class DataManager : Singleton<DataManager> {
     #region UNITDATA
     public static UnitDataBase.Data GetUnitData(int _id)
     {
-        UnitDataBase.Data UnitData = new UnitDataBase.Data();
-        for (int i = 0; i < ListUnitDataBase.Count; ++i)
-        {
-            if (_id == ListUnitDataBase[i].id)
-            {
-                UnitData.Set(ListUnitDataBase[i]);
-                return UnitData;
-            }
-        }
+        if (DicUnitDataBase.ContainsKey(_id))
+            return DicUnitDataBase[_id];
 
         Debug.LogWarning("Not Found UnitData");
         return null;
@@ -50,11 +43,8 @@ public class DataManager : Singleton<DataManager> {
     #region STAGEDATA
     public static StageDataBase.Data GetStageData(int _id)
     {
-        for (int i = 0; i < ListStageDataBase.Count; ++i)
-        {
-            if (_id == ListStageDataBase[i].id)
-                return ListStageDataBase[i];
-        }
+        if (DicStageDataBase.ContainsKey(_id))
+            return DicStageDataBase[_id];
 
         Debug.LogWarning("Not Found StageData");
         return null;

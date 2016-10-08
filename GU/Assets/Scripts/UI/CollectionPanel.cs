@@ -72,12 +72,10 @@ public class CollectionPanel : UIBasePanel {
     {
         UnitData.Clear();
         // 인간만 추가
-        for (int i = 0; i < DataManager.ListUnitDataBase.Count; ++i)
+        foreach (UnitDataBase.Data data in DataManager.DicUnitDataBase.Values)
         {
-            if (DataManager.ListUnitDataBase[i].type == ((int)eTabType + 1))
-            {
-                UnitData.Add(DataManager.ListUnitDataBase[i].id);
-            }
+            if (data.type == ((int)eTabType + 1))
+                UnitData.Add(data.id);
         }
 
         if (ScrollView.transform.localPosition != Vector3.zero)
