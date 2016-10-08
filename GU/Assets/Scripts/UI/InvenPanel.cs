@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 using MiniJSON;
 
@@ -9,6 +10,12 @@ public class InvenPanel : UIBasePanel {
     public GameObject BackBtn;
     public GameObject ModelRoot;
     public UILabel nameLbl;
+
+    public UIScrollView ScrollView;
+    public UIGrid Grid;
+    public GameObject SLOT;
+    ObjectPaging Paging;
+    List<int> UnitUidData = new List<int>();
 
     public override void Init()
     {
@@ -31,7 +38,47 @@ public class InvenPanel : UIBasePanel {
             ModelObj = null;
         }
 
+        CreateList(0);
         CreateModel(DataManager.ListUnitDataBase[Random.Range(0, DataManager.ListUnitDataBase.Count)]);
+    }
+
+    void CreateList(int idx)
+    {
+        UnitUidData.Clear();
+        for (int i = 0; i < GameManager.HaveUnitData.Count; ++i)
+        {
+            UnitUidData.Add(GameManager.HaveUnitData[i].uid);
+        }
+
+        if (ScrollView.transform.localPosition != Vector3.zero)
+        {
+            ScrollView.transform.localPosition = Vector3.zero;
+            ScrollView.GetComponent<UIPanel>().clipOffset = Vector2.zero;
+        }
+
+        if (Paging == null)
+            Paging = ObjectPaging.CreatePagingPanel(ScrollView.gameObject, Grid.gameObject, SLOT, 4, 16, UnitUidData.Count, 10, PagingCallBack);
+        else
+            Paging.NowCreate(UnitUidData.Count);
+
+        ScrollView.enabled = true;
+        ScrollView.ResetPosition();
+        ScrollView.enabled = UnitUidData.Count > 8;
+    }
+
+    void PagingCallBack(int idx, GameObject obj)
+    {
+        UnitIconSlot content = obj.GetComponent<UnitIconSlot>();
+        if (UnitUidData.Count > idx)
+        {
+            UnitDataBase.SlotData data = new UnitDataBase.SlotData();
+            data.CreateSlotData(DataManager.GetUnitData(UnitUidData[idx]));
+            content.Init(data);
+        }
+        else
+        {
+            content.Init(null);
+        }
     }
 
     void CreateModel(UnitDataBase.Data _UnitData)
