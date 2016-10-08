@@ -3,13 +3,21 @@ using System.Collections;
 
 public class UnitIconSlot : MonoBehaviour {
 
+    public enum UnitSlotType
+    {
+        MyUnit = 0,
+        SlotBase,
+    };
+    UnitSlotType eUnitSlotType = UnitSlotType.MyUnit;
+
     public GameObject Center, GradeGroup;
     public UISprite Icon, SelectSprite;
     public UILabel NameLbl, LvLbl;
 
+    public int Id = 0;
     public UnitDataBase.SlotData SlotData = null;
 
-    public void Init(UnitDataBase.SlotData _data)
+    public void Init(params object[] _data)
     {
         SetSelect(false);
         if (_data == null)
@@ -19,7 +27,27 @@ public class UnitIconSlot : MonoBehaviour {
         else
         {
             Center.SetActive(true);
-            SlotData = _data;
+            UnitDataBase.SlotData data = new UnitDataBase.SlotData();
+
+            if (_data.Length > 0)
+                eUnitSlotType = (UnitSlotType)_data[0];
+
+            if (_data.Length > 1)
+            {
+                Id = (int)_data[1];
+                switch (eUnitSlotType)
+                {
+                    case UnitSlotType.MyUnit:
+                        data.CreateSlotData(GameManager.GetMyUnit(Id));
+                        break;
+
+                    case UnitSlotType.SlotBase:
+                        data.CreateSlotData(DataManager.GetUnitData(Id));
+                        break;
+                };
+            }
+
+            SlotData = data;
             DataUpdate();
         }
     }

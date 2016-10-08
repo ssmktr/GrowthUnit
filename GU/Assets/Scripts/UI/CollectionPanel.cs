@@ -67,7 +67,7 @@ public class CollectionPanel : UIBasePanel {
     ObjectPaging Paging;
     public UIScrollView ScrollView;
     public UIGrid Grid;
-    List<UnitDataBase.SlotData> UnitData = new List<UnitDataBase.SlotData>();
+    List<int> UnitData = new List<int>();
     void CreateList()
     {
         UnitData.Clear();
@@ -76,9 +76,7 @@ public class CollectionPanel : UIBasePanel {
         {
             if (DataManager.ListUnitDataBase[i].type == ((int)eTabType + 1))
             {
-                UnitDataBase.SlotData data = new UnitDataBase.SlotData();
-                data.CreateSlotData(DataManager.ListUnitDataBase[i]);
-                UnitData.Add(data);
+                UnitData.Add(DataManager.ListUnitDataBase[i].id);
             }
         }
 
@@ -103,7 +101,7 @@ public class CollectionPanel : UIBasePanel {
         UnitIconSlot content = obj.GetComponent<UnitIconSlot>();
         if (UnitData.Count > idx)
         {
-            content.Init(UnitData[idx]);
+            content.Init(UnitIconSlot.UnitSlotType.SlotBase, UnitData[idx]);
             UIEventListener.Get(obj).onClick = OnClickSlot;
                 
             if (SelectId == 0)

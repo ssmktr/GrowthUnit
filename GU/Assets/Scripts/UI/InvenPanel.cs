@@ -15,7 +15,8 @@ public class InvenPanel : UIBasePanel {
     ObjectPaging Paging;
     List<int> UnitUidData = new List<int>();
     UnitSortType eSortTab = UnitSortType.Get;
-    int SelectGsn = 0;
+    UnitIconSlot SelectSlot = null;
+    int SelectUid = 0;
 
     public override void Init()
     {
@@ -55,7 +56,7 @@ public class InvenPanel : UIBasePanel {
     {
         base.LateInit();
 
-        SelectGsn = 0;
+        SelectUid = 0;
         nameLbl.text = "";
         if (ModelObj != null)
         {
@@ -99,19 +100,37 @@ public class InvenPanel : UIBasePanel {
         UnitIconSlot content = obj.GetComponent<UnitIconSlot>();
         if (UnitUidData.Count > idx)
         {
-            UnitDataBase.SlotData data = new UnitDataBase.SlotData();
-            data.CreateSlotData(GameManager.GetMyUnit(UnitUidData[idx]));
-            content.Init(data);
+            content.Init(UnitIconSlot.UnitSlotType.MyUnit, UnitUidData[idx]);
+            UIEventListener.Get(content.gameObject).onClick = OnClickUnitSlot;
 
-            if (SelectGsn == 0)
-                SelectGsn = UnitUidData[idx];
+            if (SelectUid == 0)
+            {
+                SelectUid = UnitUidData[idx];
+                SelectSlot = content;
+            }
 
-            content.SetSelect(SelectGsn == UnitUidData[idx]);
+            content.SetSelect(SelectUid == UnitUidData[idx]);
         }
         else
         {
             content.Init(null);
         }
+    }
+
+    void OnClickUnitSlot(GameObject sender)
+    {
+        UnitIconSlot content = sender.GetComponent<UnitIconSlot>();
+        if (sender == null || content == null || content.SlotData == null)
+            return;
+
+        if (SelectSlot != null)
+            SelectSlot.SetSelect(false);
+
+        SelectSlot = content;
+        SelectUid = content.Id;
+        SelectSlot.SetSelect(true);
+
+        CreateModel();
     }
 
     void CreateModel()
@@ -125,7 +144,7 @@ public class InvenPanel : UIBasePanel {
 
         if (ModelObj == null)
         {
-            NetData.UnitData UnitData = GameManager.GetMyUnit(SelectGsn);
+            NetData.UnitData UnitData = GameManager.GetMyUnit(SelectUid);
             if (UnitData != null)
             {
                 UnitDataBase.Data Unit = DataManager.GetUnitData(UnitData.id);

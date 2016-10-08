@@ -41,7 +41,7 @@ public class UnitDataBase {
     public class SlotData
     {
         public int id = 0;
-        public int myid = 0;
+        public int uid = 0;
         public int lv = 0;
         public int grade = 0;
         public int type = 0;
@@ -50,7 +50,7 @@ public class UnitDataBase {
         public void CreateSlotData(Data _data)
         {
             id = _data.id;
-            myid = 1;
+            uid = 1;
             lv = 1;
             grade = 1;
             type = _data.type;
@@ -60,7 +60,7 @@ public class UnitDataBase {
         public void CreateSlotData(NetData.UnitData _data)
         {
             id = _data.id;
-            myid = 1;
+            uid = _data.uid;
             lv = _data.level;
             grade = _data.grade;
             type = _data.type;
