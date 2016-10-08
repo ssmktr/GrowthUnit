@@ -2,13 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using MiniJSON;
-
 public class InvenPanel : UIBasePanel {
     GameObject ModelObj;
 
-    public GameObject BackBtn;
     public GameObject ModelRoot;
+    public GameObject[] SortTab;
     public UILabel nameLbl;
 
     public UIScrollView ScrollView;
@@ -16,21 +14,48 @@ public class InvenPanel : UIBasePanel {
     public GameObject SLOT;
     ObjectPaging Paging;
     List<int> UnitUidData = new List<int>();
+    UnitSortType eSortTab = UnitSortType.Get;
+    int SelectGsn = 0;
 
     public override void Init()
     {
         base.Init();
 
-        UIEventListener.Get(BackBtn).onClick = (sender) =>
+        for (int i = 0; i < SortTab.Length; ++i)
+            UIEventListener.Get(SortTab[i]).onClick = OnClickSortTab;
+    }
+
+    void OnClickSortTab(GameObject sender)
+    {
+        UnitSortType _eSortTab = (UnitSortType)System.Enum.Parse(typeof(UnitSortType), sender.name);
+        if (eSortTab != _eSortTab)
         {
-            UIManager.Instance.Prev();
-        };
+            eSortTab = _eSortTab;
+            ViewSortTab();
+        }
+    }
+
+    void ViewSortTab()
+    {
+        for (int i = 0; i < SortTab.Length; ++i)
+        {
+            if ((int)eSortTab == i)
+            {
+                SortTab[i].transform.FindChild("Back").gameObject.SetActive(true);
+                CreateList(i);
+            }
+            else
+            {
+                SortTab[i].transform.FindChild("Back").gameObject.SetActive(false);
+            }
+        }
     }
 
     public override void LateInit()
     {
         base.LateInit();
 
+        SelectGsn = 0;
         nameLbl.text = "";
         if (ModelObj != null)
         {
@@ -38,16 +63,19 @@ public class InvenPanel : UIBasePanel {
             ModelObj = null;
         }
 
+        // 소팅탭
+        ViewSortTab();
+
         CreateList(0);
-        CreateModel(DataManager.ListUnitDataBase[Random.Range(0, DataManager.ListUnitDataBase.Count)]);
+        CreateModel();
     }
 
     void CreateList(int idx)
     {
         UnitUidData.Clear();
-        for (int i = 0; i < GameManager.HaveUnitData.Count; ++i)
+        foreach (NetData.UnitData unit in GameManager.HaveUnitData.Values)
         {
-            UnitUidData.Add(GameManager.HaveUnitData[i].uid);
+            UnitUidData.Add(unit.uid);
         }
 
         if (ScrollView.transform.localPosition != Vector3.zero)
@@ -72,8 +100,13 @@ public class InvenPanel : UIBasePanel {
         if (UnitUidData.Count > idx)
         {
             UnitDataBase.SlotData data = new UnitDataBase.SlotData();
-            data.CreateSlotData(DataManager.GetUnitData(UnitUidData[idx]));
+            data.CreateSlotData(GameManager.GetMyUnit(UnitUidData[idx]));
             content.Init(data);
+
+            if (SelectGsn == 0)
+                SelectGsn = UnitUidData[idx];
+
+            content.SetSelect(SelectGsn == UnitUidData[idx]);
         }
         else
         {
@@ -81,7 +114,7 @@ public class InvenPanel : UIBasePanel {
         }
     }
 
-    void CreateModel(UnitDataBase.Data _UnitData)
+    void CreateModel()
     {
         if (ModelObj != null)
         {
@@ -92,20 +125,26 @@ public class InvenPanel : UIBasePanel {
 
         if (ModelObj == null)
         {
-            AssetBundleLoad.Instance.AssetUnitLoad(DataManager.GetName(_UnitData.stringid), (go) => {
-                go.transform.localPosition = Vector3.zero;
-                go.transform.localScale = new Vector3(-100, 100, 100) * _UnitData.cardsize;
-                UIManager.SetLayer(go.transform, 8);
+            NetData.UnitData UnitData = GameManager.GetMyUnit(SelectGsn);
+            if (UnitData != null)
+            {
+                UnitDataBase.Data Unit = DataManager.GetUnitData(UnitData.id);
 
-                Renderer[] render = go.GetComponentsInChildren<Renderer>();
-                for (int i = 0; i < render.Length; ++i)
-                    render[i].sortingOrder += 1;
+                AssetBundleLoad.Instance.AssetUnitLoad(DataManager.GetUnitResourceData(UnitData.id).assetbundlename, (go) => {
+                    go.transform.localPosition = Vector3.zero;
+                    go.transform.localScale = new Vector3(-100, 100, 100) * Unit.cardsize;
+                    UIManager.SetLayer(go.transform, 8);
 
-                ModelObj = go;
+                    Renderer[] render = go.GetComponentsInChildren<Renderer>();
+                    for (int i = 0; i < render.Length; ++i)
+                        render[i].sortingOrder += 1;
 
-            }, ModelRoot);
+                    ModelObj = go;
 
-            nameLbl.text = _UnitData.name;
+                }, ModelRoot);
+
+                nameLbl.text = DataManager.GetName(Unit.stringid);
+            }
         }
     }
 }

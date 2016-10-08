@@ -90,6 +90,7 @@ public class Title : MonoBehaviour {
         yield return StartCoroutine(_LoadUnitTableData());
         yield return StartCoroutine(_LoadStageTableData());
         yield return StartCoroutine(_LoadNameTableData());
+        yield return StartCoroutine(_LoadResourceTableData());
         yield return StartCoroutine(_LoadConfigTableData());
 
         // Sqlite 데이터
@@ -367,7 +368,7 @@ public class Title : MonoBehaviour {
     void SetNameTableData(string _Content)
     {
         string Content = _Content.Trim();
-        DataManager.DIcNameDataBase.Clear();
+        DataManager.DicNameDataBase.Clear();
         List<object> ListData = Json.Deserialize(Content) as List<object>;
         for (int i = 0; i < ListData.Count; ++i)
         {
@@ -382,7 +383,66 @@ public class Title : MonoBehaviour {
                 if (DicData.ContainsKey("kor"))
                     data.kor = JsonUtil.GetStringValue(DicData, "kor");
 
-                DataManager.DIcNameDataBase.Add(data.id, data);
+                DataManager.DicNameDataBase.Add(data.id, data);
+            }
+        }
+    }
+    #endregion
+    #region RESOURCEDATA
+    IEnumerator _LoadResourceTableData()
+    {
+        WWW www = new WWW(GameInfo.AssetBundleUrl + "TableData/ResourceData.json");
+        while (!www.isDone)
+        {
+            if (www.progress > 0)
+            {
+                UiProgressBar.gameObject.SetActive(true);
+                UiProgressBar.value = www.progress;
+                UiProgressBar.transform.FindChild("PercentLbl").GetComponent<UILabel>().text = string.Format("{0}%", (int)(UiProgressBar.value * 100));
+            }
+            yield return null;
+        }
+
+        yield return www;
+
+        if (www.error == null)
+        {
+            UiProgressBar.gameObject.SetActive(false);
+            GameManager.ViewDebug("ResourceData : " + www.text);
+            SetResourceTableData(www.text);
+        }
+        else
+            GameManager.ViewDebug(www.error);
+    }
+
+    void SetResourceTableData(string _Content)
+    {
+        string Content = _Content.Trim();
+        DataManager.DicUnitResourceData.Clear();
+        List<object> ListData = Json.Deserialize(Content) as List<object>;
+        for (int i = 0; i < ListData.Count; ++i)
+        {
+            Dictionary<string, object> DicData = ListData[i] as Dictionary<string, object>;
+            if (DicData != null)
+            {
+                UnitDataBase.ResourceData data = new UnitDataBase.ResourceData();
+
+                if (DicData.ContainsKey("id"))
+                    data.id = JsonUtil.GetIntValue(DicData, "id");
+
+                if (DicData.ContainsKey("type"))
+                    data.type = JsonUtil.GetIntValue(DicData, "type");
+
+                if (DicData.ContainsKey("assetbundlename"))
+                    data.assetbundlename = JsonUtil.GetStringValue(DicData, "assetbundlename");
+
+                switch (data.type)
+                {
+                    case 1:
+                        DataManager.DicUnitResourceData.Add(data.id, data);
+                        break;
+                };
+                
             }
         }
     }

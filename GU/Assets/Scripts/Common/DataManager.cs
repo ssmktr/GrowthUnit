@@ -4,10 +4,13 @@ using System.Collections.Generic;
 
 public class DataManager : Singleton<DataManager> {
     public static Dictionary<string, int> DicConfig = new Dictionary<string, int>();
-    public static List<UnitDataBase.Data> ListUnitDataBase = new List<UnitDataBase.Data>();
-    public static List<StageDataBase.Data> ListStageDataBase = new List<StageDataBase.Data>();
-    public static Dictionary<int, NameDataBase.Data> DIcNameDataBase = new Dictionary<int, NameDataBase.Data>();
 
+    public static List<UnitDataBase.Data> ListUnitDataBase = new List<UnitDataBase.Data>();
+    public static Dictionary<int, UnitDataBase.ResourceData> DicUnitResourceData = new Dictionary<int, UnitDataBase.ResourceData>();
+
+    public static Dictionary<int, NameDataBase.Data> DicNameDataBase = new Dictionary<int, NameDataBase.Data>();
+
+    public static List<StageDataBase.Data> ListStageDataBase = new List<StageDataBase.Data>();
     
     public static int GetConfigData(string _key)
     {
@@ -21,13 +24,26 @@ public class DataManager : Singleton<DataManager> {
     #region UNITDATA
     public static UnitDataBase.Data GetUnitData(int _id)
     {
+        UnitDataBase.Data UnitData = new UnitDataBase.Data();
         for (int i = 0; i < ListUnitDataBase.Count; ++i)
         {
             if (_id == ListUnitDataBase[i].id)
-                return ListUnitDataBase[i];
+            {
+                UnitData.Set(ListUnitDataBase[i]);
+                return UnitData;
+            }
         }
 
         Debug.LogWarning("Not Found UnitData");
+        return null;
+    }
+
+    public static UnitDataBase.ResourceData GetUnitResourceData(int _id)
+    {
+        if (DicUnitResourceData.ContainsKey(_id))
+            return DicUnitResourceData[_id];
+
+        Debug.LogWarning("Not Found UnitResourceData");
         return null;
     }
     #endregion
@@ -48,8 +64,8 @@ public class DataManager : Singleton<DataManager> {
     #region NAMEDATA
     public static NameDataBase.Data GetNameData(int _id)
     {
-        if (DIcNameDataBase.ContainsKey(_id))
-            return DIcNameDataBase[_id];
+        if (DicNameDataBase.ContainsKey(_id))
+            return DicNameDataBase[_id];
 
         Debug.LogWarning("Not Found NameData");
         return null;
@@ -57,8 +73,8 @@ public class DataManager : Singleton<DataManager> {
 
     public static string GetName(int _id)
     {
-        if (DIcNameDataBase.ContainsKey(_id))
-            return DIcNameDataBase[_id].kor;
+        if (DicNameDataBase.ContainsKey(_id))
+            return DicNameDataBase[_id].kor;
 
         Debug.LogWarning("Not Found Name String");
         return null;

@@ -18,6 +18,24 @@ public class UnitDataBase {
         public float attackrange = 0f;
         public float cardsize = 0f;
         public float battlesize = 0f;
+
+        public void Set(Data _data)
+        {
+            id = _data.id;
+            name = _data.name;
+            stringid = _data.stringid;
+            type = _data.type;
+            classtype = _data.classtype;
+            move_speed = _data.move_speed;
+            hp = _data.hp;
+            atk = _data.atk;
+            def = _data.def;
+            cri = _data.cri;
+            attackrange = _data.attackrange;
+            cardsize = _data.cardsize;
+            battlesize = _data.battlesize;
+        }
+
     };
 
     public class SlotData
@@ -25,7 +43,6 @@ public class UnitDataBase {
         public int id = 0;
         public int myid = 0;
         public int lv = 0;
-        public string name = "";
         public int grade = 0;
         public int type = 0;
         public int classtype = 0;
@@ -35,8 +52,17 @@ public class UnitDataBase {
             id = _data.id;
             myid = 1;
             lv = 1;
-            name = _data.name;
             grade = 1;
+            type = _data.type;
+            classtype = _data.classtype;
+        }
+
+        public void CreateSlotData(NetData.UnitData _data)
+        {
+            id = _data.id;
+            myid = 1;
+            lv = _data.level;
+            grade = _data.grade;
             type = _data.type;
             classtype = _data.classtype;
         }
@@ -61,6 +87,13 @@ public class UnitDataBase {
             cri = _data.cri;
             attackrange = _data.attackrange;
         }
+    };
+
+    public class ResourceData
+    {
+        public int id = 0;
+        public int type = 0;
+        public string assetbundlename = "";
     };
 };
 
@@ -87,3 +120,13 @@ public class NameDataBase
         public string kor;
     };
 };
+
+
+
+public enum UnitSortType
+{
+    Get = 0,
+    Level,
+    Grade,
+    Type,
+}

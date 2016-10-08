@@ -150,19 +150,22 @@ public class CollectionPanel : UIBasePanel {
             UnitDataBase.Data UnitData = DataManager.GetUnitData(SelectId);
             if (UnitData != null)
             {
-                string UnitName = DataManager.GetName(UnitData.stringid);
-                AssetBundleLoad.Instance.AssetUnitLoad(UnitName, (obj) => {
-                    obj.transform.localPosition = Vector3.zero;
-                    obj.transform.localScale = Vector3.one * 100 * UnitData.cardsize;
-                    UIManager.SetLayer(obj.transform, 8);
+                string UnitName = DataManager.GetUnitResourceData(UnitData.id).assetbundlename;
+                if (!string.IsNullOrEmpty(UnitName))
+                {
+                    AssetBundleLoad.Instance.AssetUnitLoad(UnitName, (obj) => {
+                        obj.transform.localPosition = Vector3.zero;
+                        obj.transform.localScale = Vector3.one * 100 * UnitData.cardsize;
+                        UIManager.SetLayer(obj.transform, 8);
 
-                    Renderer[] render = obj.GetComponentsInChildren<Renderer>();
-                    for (int i = 0; i < render.Length; ++i)
-                        render[i].sortingOrder += 1;
+                        Renderer[] render = obj.GetComponentsInChildren<Renderer>();
+                        for (int i = 0; i < render.Length; ++i)
+                            render[i].sortingOrder += 1;
 
-                    ModelObj = obj;
+                        ModelObj = obj;
 
-                }, ModelRoot);
+                    }, ModelRoot);
+                }
             }
         }
     }

@@ -51,5 +51,6 @@ public class UnitIconSlot : MonoBehaviour {
     {
         if (SelectSprite != null)
             SelectSprite.gameObject.SetActive(_bSelect);
-    }	
+    }
+    
 }

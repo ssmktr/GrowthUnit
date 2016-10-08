@@ -69,8 +69,10 @@ public class SqliteManager : Singleton<SqliteManager> {
                             data.move_speed = reader.GetFloat(6);
                             data.hp = reader.GetFloat(7);
                             data.atk = reader.GetInt32(8);
-                            data.cri = reader.GetFloat(9);
-                            data.attackrange = reader.GetFloat(10);
+                            data.def = reader.GetInt32(9);
+                            data.cri = reader.GetFloat(10);
+                            data.attackrange = reader.GetFloat(11);
+                            data.grade = reader.GetInt32(12);
                             GameManager.HaveUnitData.Add(reader.GetInt32(0), data);
                         }
                     }
