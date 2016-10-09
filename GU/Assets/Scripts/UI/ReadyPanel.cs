@@ -9,6 +9,7 @@ public class ReadyPanel : UIBasePanel {
     public GameObject SLOT;
     ObjectPaging Paging;
     List<int> ListUid = new List<int>();
+    List<int> ListSelectUid = new List<int>();
 
     public override void Init()
     {
@@ -52,8 +53,36 @@ public class ReadyPanel : UIBasePanel {
         if (ListUid.Count > idx)
         {
             content.Init(UnitIconSlot.UnitSlotType.MyUnit, ListUid[idx]);
+            UIEventListener.Get(content.gameObject).onClick = OnClickUnitSlot;
+
+            // 선택한 유닛
+            content.SetSelect(ListSelectUid.Contains(content.SlotData.uid));
         }
         else
             content.Init(null);
+    }
+
+    void OnClickUnitSlot(GameObject sender)
+    {
+        UnitIconSlot content = sender.GetComponent<UnitIconSlot>();
+        if (sender == null || content == null || content.SlotData == null)
+            return;
+
+        // 선택했으면 빼고 선택 안됐으면 넣는다
+        if (ListSelectUid.Contains(content.SlotData.uid))
+        {
+            ListSelectUid.Remove(content.SlotData.uid);
+            content.SetSelect(false);
+        }
+        else 
+        {
+            if (ListSelectUid.Count < 3)
+            {
+                ListSelectUid.Add(content.SlotData.uid);
+                content.SetSelect(true);
+            }
+            else
+                UIManager.Instance.OpenMessagePopup("더 이상 선택 할 수 없습니다.", delegate() { });
+        }
     }
 }
