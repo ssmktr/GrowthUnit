@@ -42,6 +42,7 @@ public class UnitDataBase {
     {
         public int id = 0;
         public int uid = 0;
+        public int exp = 0;
         public int lv = 0;
         public int grade = 0;
         public int type = 0;
@@ -52,6 +53,7 @@ public class UnitDataBase {
             id = _data.id;
             uid = 1;
             lv = 1;
+            exp = 0;
             grade = 1;
             type = _data.type;
             classtype = _data.classtype;
@@ -62,6 +64,7 @@ public class UnitDataBase {
             id = _data.id;
             uid = _data.uid;
             lv = _data.level;
+            exp = _data.exp;
             grade = _data.grade;
             type = _data.type;
             classtype = _data.classtype;

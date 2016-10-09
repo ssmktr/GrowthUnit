@@ -5,6 +5,7 @@ public class NetData {
         public int uid;
         public int id;
         public int level;
+        public int exp;
         public int grade;
         public int stringid;
         public int type;
