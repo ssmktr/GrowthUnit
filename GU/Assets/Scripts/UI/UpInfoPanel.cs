@@ -51,7 +51,7 @@ public class UpInfoPanel : UIBasePanel {
         SetValue();
     }
 
-    void SetValue()
+    public void SetValue()
     {
         EnergyValueLbl.text = string.Format("{0}/{1}", GameManager.Instance.Energy, GameManager.Instance.MaxEnergy);
         GoldValueLbl.text = GameManager.Instance.Gold.ToString("N0");

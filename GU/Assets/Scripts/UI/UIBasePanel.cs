@@ -22,7 +22,7 @@ public class UIBasePanel : MonoBehaviour {
     {
         GameObject UpInfo = UIManager.GetUI("UpInfoPanel");
         if (UpInfo != null)
-            UpInfo.GetComponent<UpInfoPanel>().SetBackBtn(IsUpInfoBackBtn());
+            UpInfo.GetComponent<UpInfoPanel>().SetBackBtn(!(UIManager.GetFirstPanel() is LobbyPanel));
 
         Open();
     }
@@ -41,22 +41,16 @@ public class UIBasePanel : MonoBehaviour {
     {
         if (eUIType != UIType.Ignore)
             UIManager.CloseEvent();
+
+        GameObject UpInfo = UIManager.GetUI("UpInfoPanel");
+        if (UpInfo != null)
+            UpInfo.GetComponent<UpInfoPanel>().SetBackBtn(!(UIManager.GetFirstPanel() is LobbyPanel));
+
         Destroy(gameObject);
     }
 
     public virtual void Prev()
     {
 
-    }
-
-    bool IsUpInfoBackBtn()
-    {
-        if (UIManager.GetFirstPanel() is LobbyPanel)
-            return false;
-
-        if (UIManager.GetFirstPanel().eUIType == UIType.Message || UIManager.GetFirstPanel().eUIType == UIType.Popup || UIManager.GetFirstPanel().eUIType == UIType.Ignore)
-            return false;
-        
-        return true;
     }
 }

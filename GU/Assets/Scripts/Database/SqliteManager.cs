@@ -17,8 +17,6 @@ public class SqliteManager : Singleton<SqliteManager> {
     #region UNITDATA
     public IEnumerator RequestGetUnit(int _id)
     {
-        yield return null;
-
         using (IDbConnection dbConnection = new SqliteConnection(SqliteConnection))
         {
             dbConnection.Open();
@@ -38,12 +36,11 @@ public class SqliteManager : Singleton<SqliteManager> {
                 }
             }
         }
+        yield return null;
     }
 
     public IEnumerator RequestLoadMyUnit()
     {
-        yield return null;
-
         using (IDbConnection Connection = new SqliteConnection(SqliteConnection))
         {
             Connection.Open();
@@ -82,14 +79,31 @@ public class SqliteManager : Singleton<SqliteManager> {
                 }
             }
         }
+        yield return null;
+    }
+
+    public IEnumerator RequestRemoveUnit(int _uid)
+    {
+        using (IDbConnection Connection = new SqliteConnection(SqliteConnection))
+        {
+            Connection.Open();
+            using (IDbCommand Cmd = Connection.CreateCommand())
+            {
+                string Query = string.Format("DELETE FROM UnitData WHERE uid={0}", _uid);
+                Cmd.CommandText = Query;
+                Cmd.ExecuteReader();
+                GameManager.HaveUnitData.Remove(_uid);
+
+                Connection.Close();
+            }
+        }
+        yield return null;
     }
     #endregion
 
     #region USERDATA
     public IEnumerator RequestLoadUserData()
     {
-        yield return null;
-
         using (IDbConnection Connection = new SqliteConnection(SqliteConnection))
         {
             Connection.Open();
@@ -115,6 +129,34 @@ public class SqliteManager : Singleton<SqliteManager> {
                 }
             }
         }
+        UIManager.Instance.SetUpInfoData();
+        yield return null;
+    }
+
+    public IEnumerator RequestUpdateUserData(int _type, int _value)
+    {
+        using (IDbConnection Connection = new SqliteConnection(SqliteConnection))
+        {
+            Connection.Open();
+            using (IDbCommand Cmd = Connection.CreateCommand())
+            {
+                string Type = "";
+                switch (_type)
+                {
+                    case 1: Type = "level"; break;
+                    case 2: Type = "exp"; break;
+                    case 3: Type = "energy"; break;
+                    case 4: Type = "gold"; break;
+                    case 5: Type = "dia"; break;
+                    case 6: Type = "heart"; break;
+                };
+                string Quest = string.Format("UPDATE UserData SET {0}={1} WHERE rowid = 1", Type, _value);
+                Cmd.CommandText = Quest;
+                Cmd.ExecuteReader();
+                Connection.Close();
+            }
+        }
+        yield return null;
     }
     #endregion
 }

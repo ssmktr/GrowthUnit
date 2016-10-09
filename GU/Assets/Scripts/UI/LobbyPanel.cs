@@ -3,7 +3,7 @@ using System.Collections;
 
 public class LobbyPanel : UIBasePanel {
 
-    public GameObject InvenBtn, ReadyBtn, CollectionBtn;
+    public GameObject InvenBtn, ReadyBtn, CollectionBtn, GachaBtn;
 
     public override void Init()
     {
@@ -26,11 +26,16 @@ public class LobbyPanel : UIBasePanel {
             Hide();
             UIManager.OpenUI("CollectionPanel");
         };
+
+        UIEventListener.Get(GachaBtn).onClick = (sender) =>
+        {
+            Hide();
+            UIManager.OpenUI("GachaPanel");
+        };
     }
 
     public override void LateInit()
     {
         base.LateInit();
-
     }
 }

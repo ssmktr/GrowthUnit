@@ -6,6 +6,7 @@ public class InvenPanel : UIBasePanel {
     GameObject ModelObj;
 
     public GameObject ModelRoot;
+    public GameObject SellBtn;
     public GameObject[] SortTab;
     public UILabel nameLbl;
 
@@ -24,6 +25,21 @@ public class InvenPanel : UIBasePanel {
 
         for (int i = 0; i < SortTab.Length; ++i)
             UIEventListener.Get(SortTab[i]).onClick = OnClickSortTab;
+
+        // 유닛 판매
+        UIEventListener.Get(SellBtn).onClick = (sender) =>
+        {
+            if (SelectSlot != null && SelectUid > 0)
+            {
+                StartCoroutine(SqliteManager.Instance.RequestRemoveUnit(SelectUid));
+                StartCoroutine(SqliteManager.Instance.RequestUpdateUserData(4, GameManager.Instance.Gold + 500));
+                StartCoroutine(SqliteManager.Instance.RequestLoadUserData());
+
+                SelectUid = 0;
+                CreateList(0);
+                CreateModel();
+            }
+        };
     }
 
     void OnClickSortTab(GameObject sender)

@@ -167,4 +167,12 @@ public class UIManager : Singleton<UIManager> {
         for (int i = 0; i < trans.Length; ++i)
             trans[i].gameObject.layer = _Layer;
     }
+
+    // 상단바 재화 데이터 업데이트
+    public void SetUpInfoData()
+    {
+        GameObject Panel = GetUI("UpInfoPanel");
+        if (Panel != null)
+            Panel.GetComponent<UpInfoPanel>().SetValue();
+    }
 }
