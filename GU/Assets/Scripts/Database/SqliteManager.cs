@@ -156,7 +156,7 @@ public class SqliteManager : Singleton<SqliteManager> {
                 Connection.Close();
             }
         }
-        yield return null;
+        yield return RequestLoadUserData();
     }
     #endregion
 }

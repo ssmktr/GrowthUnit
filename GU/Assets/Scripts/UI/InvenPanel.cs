@@ -33,7 +33,6 @@ public class InvenPanel : UIBasePanel {
             {
                 StartCoroutine(SqliteManager.Instance.RequestRemoveUnit(SelectUid));
                 StartCoroutine(SqliteManager.Instance.RequestUpdateUserData(4, GameManager.Instance.Gold + 500));
-                StartCoroutine(SqliteManager.Instance.RequestLoadUserData());
 
                 SelectUid = 0;
                 CreateList(0);

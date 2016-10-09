@@ -37,7 +37,6 @@ public class GachaPanel : UIBasePanel {
                     StartCoroutine(SqliteManager.Instance.RequestGetUnit(UnitId));
                     StartCoroutine(SqliteManager.Instance.RequestLoadMyUnit());
                     StartCoroutine(SqliteManager.Instance.RequestUpdateUserData(4, GameManager.Instance.Gold - NORMAL_GACHA_GOLD));
-                    StartCoroutine(SqliteManager.Instance.RequestLoadUserData());
                 }, delegate() { }, "뽑기", "취소");
             }
         };
@@ -65,7 +64,6 @@ public class GachaPanel : UIBasePanel {
                     StartCoroutine(SqliteManager.Instance.RequestGetUnit(UnitId));
                     StartCoroutine(SqliteManager.Instance.RequestLoadMyUnit());
                     StartCoroutine(SqliteManager.Instance.RequestUpdateUserData(4, GameManager.Instance.Gold - HIGH_GACHA_GOLD));
-                    StartCoroutine(SqliteManager.Instance.RequestLoadUserData());
                 }, delegate () { }, "뽑기", "취소");
             }
         };
@@ -93,7 +91,6 @@ public class GachaPanel : UIBasePanel {
                     StartCoroutine(SqliteManager.Instance.RequestGetUnit(UnitId));
                     StartCoroutine(SqliteManager.Instance.RequestLoadMyUnit());
                     StartCoroutine(SqliteManager.Instance.RequestUpdateUserData(4, GameManager.Instance.Gold - SPECIAL_GACHA_GOLD));
-                    StartCoroutine(SqliteManager.Instance.RequestLoadUserData());
                 }, delegate () { }, "뽑기", "취소");
             }
         };
